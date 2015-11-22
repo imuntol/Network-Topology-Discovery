@@ -21,6 +21,7 @@ SNMPv2MIB_sysDescr = ".1.3.6.1.2.1.1.1"
 IPMIB_ipAdEntAddr = ".1.3.6.1.2.1.4.20.1.1"
 IPMIB_ipAdEntIfIndex = ".1.3.6.1.2.1.4.20.1.2"
 IFMIB_ifDescr = ".1.3.6.1.2.1.2.2.1.2"
+IFMIB_ifInOctets = ".1.3.6.1.2.1.2.2.1.10"
 
 IPMIB_ipNetToMediaNetAddress = ".1.3.6.1.2.1.4.22.1.3"
 
@@ -90,6 +91,7 @@ def router(ip,done_list,notdone_list,filename):
     ip_data = getData(command(community,ip,IPMIB_ipAdEntAddr))
     index_data = getData(command(community,ip,IPMIB_ipAdEntIfIndex))
     interface_data = getData(command(community,ip,IFMIB_ifDescr))
+    traffic_data = getData(command(community,ip,IFMIB_ifInOctets))
 
     #find cdp neighbors
     name_cdp = getData(command(community,ip,CISCOCDPMIB_cdpCacheDeviceId))
@@ -101,6 +103,7 @@ def router(ip,done_list,notdone_list,filename):
     reArrange(ip_data)
     reArrange(index_data)
     reArrange(interface_data)
+    reArrange(traffic_data)
 
     reArrange(name_cdp)
     reArrange(interface_cdp)
@@ -111,7 +114,7 @@ def router(ip,done_list,notdone_list,filename):
     
     for i in range(0,len(ip_data)):
         done_list.append(ip_data[i])
-        newData.append(ip_data[i] + "," + interface_data[int(index_data[i])-1])
+        newData.append(ip_data[i] + "," + interface_data[int(index_data[i])-1] + "," + traffic_data[int(index_data[i])-1])
 
     for j in range(0,len(done_list)):
         if done_list[j] in ip_cdp:

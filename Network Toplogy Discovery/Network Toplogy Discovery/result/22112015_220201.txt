@@ -1,0 +1,12 @@
+R1
+Cisco IOS Software, 3700 Software (C3725-ADVENTERPRISEK9-M), Version 12.4(15)T10, RELEASE SOFTWARE (fc3)
+Technical Support: http://www.cisco.com/techsupport
+Copyright (c) 1986-2009 by Cisco Systems, Inc.
+Compiled Mon 14-Sep-09 15:53 by prod_rel_team
+192.168.1.2,FastEthernet0/0
+192.168.2.1,FastEthernet0/1
+192.168.3.1,FastEthernet1/0
+192.168.4.1,FastEthernet2/0
+R3,FastEthernet0/1
+R4,FastEthernet0/1
+R2,FastEthernet0/0
