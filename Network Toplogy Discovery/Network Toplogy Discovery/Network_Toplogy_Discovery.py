@@ -50,6 +50,11 @@ def getData(command):
 def detail(data):
     data[0] = data[0].split("G:")[1];
     data[0] = data[0].strip()
+    temp = ""
+    for i in range(0,len(data)):
+        temp = temp + data[i]
+    data = []
+    data.append(temp)
     print data
     return data
 
