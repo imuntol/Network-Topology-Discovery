@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>867144f9-2d18-43db-bc2d-4d8f945b56b0</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>test2.py</StartupFile>
+    <StartupFile>test.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -23,10 +23,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Network_Toplogy_Discovery.py" />
-    <Compile Include="test2.py">
+    <Compile Include="test.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="test_pymongoDB.py">
+    <Compile Include="test_mongoDB_done.py">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
