@@ -29,6 +29,9 @@
     <Compile Include="test_mongoDB_done.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="test_traffic.py">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -132,7 +132,7 @@ def router(ip,done_list,notdone_list,filename):
     print notdone_list
     newCDP = []
     
-    for i in range(0,len(ip_cdp)):
+    for i in range(0,len(name_cdp)):
         newCDP.append(name_cdp[i] + "," + interface_cdp[i])
     a = name_data + detail_data + newData + newCDP
 
