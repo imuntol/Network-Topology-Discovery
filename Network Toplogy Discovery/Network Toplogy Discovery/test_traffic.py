@@ -1,4 +1,4 @@
-import os
+﻿import os
 import pymongo
 from pymongo import MongoClient
 import datetime
@@ -9,6 +9,7 @@ import test_mongoDB_done as topology
 ##########
 IFMIB_ifInOctets = ".1.3.6.1.2.1.2.2.1.10"
 IFMIB_ifOnOctets = ".1.3.6.1.2.1.2.2.1.16"
+IFMIB_ifSpeed = ".1.3.6.1.2.1.2.2.1.5"
 IFMIB_ifAdminStatus = ".1.3.6.1.2.1.2.2.1.7"
 IFMIB_ifDescr = ".1.3.6.1.2.1.2.2.1.2"
 ##########
@@ -26,6 +27,10 @@ def traffIn(community,ip):
 def traffOut(community,ip):
     Out = topology.reArrange(topology.getData(topology.command(community,ip,IFMIB_ifOnOctets)))
     return Out
+
+def ifSpeed(community,ip):
+    Speed = topology.reArrange(topology.getData(topology.command(community,ip,IFMIB_ifSpeed)))
+    return Speed
 
 def checkStatus(community,ip):
     status = topology.reArrange(topology.getData(topology.command(community,ip,IFMIB_ifAdminStatus)))
@@ -52,6 +57,9 @@ def traffic(community,ipTraffic,databaseName):
         In_2_data = traffIn(community,ip)
         Out_2_data = traffOut(community,ip)
 
+        ### Speed of each interface
+        ifSpeed = ifSpeed(community,ip)
+
         form = {"index":str(index)}
         coll.insert_one(form)
         temp = 0
@@ -64,6 +72,9 @@ def traffic(community,ipTraffic,databaseName):
                 Out = ((int(Out_2_data[i]) - int(Out_1_data[i]))*8)/(t*1024*1024)
                 print "In : " + str(In) + " Mb"
                 print "Out : " + str(Out) + " Mb"
+                ### find Bandwith Usage in %
+                Speed_In = In*100/ifSpeed
+                Speed_Out = In*100/ifSpeed
 
                 newTraffic.append("index : " + str(index) + " = in " + str(In)+" , "+str(interface[i]))
                 newTraffic.append("index : " + str(index) + " = out " + str(Out)+" , "+str(interface[i]))
