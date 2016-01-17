@@ -18,7 +18,7 @@ community = "test"
 your_ip = "192.168.1.1"
 #ip = "192.168.1.2"
 ipTraffic = ["192.168.1.2"]
-#databaseName = "aaaaaa"
+#collectionsName = "aaaaaa"
 
 def traffIn(community,ip):
     In = topology.reArrange(topology.getData(topology.command(community,ip,IFMIB_ifInOctets)))
@@ -40,10 +40,10 @@ def checkInterface(community,ip):
     interface = topology.reArrange(topology.getData(topology.command(community,ip,IFMIB_ifDescr)))
     return interface
 
-def traffic(community,ipTraffic,databaseName):
+def traffic(community,ipTraffic,collectionsName):
     index = 0
-    coll = topology.connectDatabase(databaseName + "_traffic")
-    filename = "traffic_" + topology.makeFile(databaseName)
+    coll = topology.connectDatabase(collectionsName + "_traffic")
+    filename = "traffic_" + topology.makeFile(collectionsName)
     newTraffic = []
     for ip in ipTraffic:
         status = checkStatus(community,ip)
@@ -73,13 +73,13 @@ def traffic(community,ipTraffic,databaseName):
                 print "In : " + str(In) + " Mb"
                 print "Out : " + str(Out) + " Mb"
                 ### find Bandwith Usage in %
-                Speed_In = In*100/ifSpeed
-                Speed_Out = In*100/ifSpeed
+                Speed_In = In*100/ifSpeed[i]
+                Speed_Out = Out*100/ifSpeed[i]
 
-                newTraffic.append("index : " + str(index) + " = in " + str(In)+" , "+str(interface[i]))
-                newTraffic.append("index : " + str(index) + " = out " + str(Out)+" , "+str(interface[i]))
-                coll.update({"index":str(index)},{'$set':{"BW_in"+str(temp):str(In)+","+str(interface[i])}})
-                coll.update({"index":str(index)},{'$set':{"BW_out"+str(temp):str(Out)+","+str(interface[i])}})
+                newTraffic.append("index : " + str(index) + " = in " + str(In)+" , "+str(interface[i]) + "," +str(Speed_In))
+                newTraffic.append("index : " + str(index) + " = out " + str(Out)+" , "+str(interface[i])+ "," +str(Speed_Out))
+                coll.update({"index":str(index)},{'$set':{"BW_in"+str(temp):str(In)+","+str(interface[i])+ "," +str(Speed_In)}})
+                coll.update({"index":str(index)},{'$set':{"BW_out"+str(temp):str(Out)+","+str(interface[i])+ "," +str(Speed_Out)}})
 
                 temp +=1
         index += 1

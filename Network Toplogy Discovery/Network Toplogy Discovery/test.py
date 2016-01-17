@@ -11,5 +11,5 @@ import test_mongoDB_done as topology
 #databaseName = "abcd"
 
 
-community,ipTraffic,databaseName = topology.topology("192.168.1.1","192.168.1.2","test")
-traffic.traffic(community,ipTraffic,databaseName)
+community,ipTraffic,collectionsName = topology.topology("192.168.1.1","192.168.1.2","test")
+traffic.traffic(community,ipTraffic,collectionsName)

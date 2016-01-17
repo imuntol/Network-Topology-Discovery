@@ -92,9 +92,9 @@ def makeFile(filename):
     thefile.close()
     return filename
 
-def connectDatabase(databaseName):
+def connectDatabase(collectionsName):
     client = MongoClient()
-    database = str(databaseName)
+    database = str(collectionsName)
     db = client['test']
     collection = db[database]
     return collection
@@ -177,9 +177,9 @@ def topology(your_ip,ip,community):
     index = 0
 
     start_time = time.time()
-    databaseName = name()
-    coll = connectDatabase(databaseName)
-    filename = makeFile(databaseName)
+    collectionsName = name()
+    coll = connectDatabase(collectionsName)
+    filename = makeFile(collectionsName)
     done_list.append(your_ip)
     ipTraffic.append(ip)
     done_list,notdone_list,index = router(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community)
@@ -190,7 +190,7 @@ def topology(your_ip,ip,community):
         #print ip
         done_list,notdone_list,index = router(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community)
     print("--- %s seconds ---" % (time.time() - start_time))
-    return community,ipTraffic,databaseName
+    return community,ipTraffic,collectionsName
 
 #community,ipTraff,dbname = topology(your_ip,ip,community)
 #print "\n"
