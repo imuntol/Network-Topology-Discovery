@@ -23,17 +23,35 @@ def connectDatabase(collectionsName):
 
 a = []
 
-Host = "192.168.0.103"
+Client = "10.20.21.194"
+Client_port = 50000
+Host = "10.20.21.40"
 Port = 54500
 Buff_size = 1024
+
+#server
 s = socket(AF_INET, SOCK_STREAM) 
 s.bind((Host,Port))
 s.listen(1)
+
+#client
+#sc = socket(AF_INET, SOCK_STREAM)
+#sc.connect((Client,Client_port))
+
+
 while True:
     client,address = s.accept()
     print('connected from: ', address)
     #client.send(str.encode('Welcome to my Chat room!'))
-    index = 0
+
+    index = 1
+
+    #test send
+    #sc.send("Test ppppppppppppppppppp")
+    #test = s.recv(Buff_size)
+    #print test
+    #sc.close
+
     while True:
         #message = json.dumps({"cmd":"start","ip":"192.168.1.1","seed_ip":"192.168.1.2","com":"test"})
         message = client.recv(Buff_size)
@@ -46,9 +64,9 @@ while True:
             ip = message2['ip']
             seed_ip = message2['seed_ip']
             community = message2['com']
-            community,ipTraffic,collectionsName = topology.topology(ip,seed_ip,community)
-            traffic.traffic(community,ipTraffic,collectionsName)
-            #collectionsName = "Thu26Nov2015_011006"
+            #community,ipTraffic,collectionsName = topology.topology(ip,seed_ip,community)
+            #traffic.traffic(community,ipTraffic,collectionsName)
+            collectionsName = "Thu26Nov2015_011006"
             coll = connectDatabase(collectionsName)
             #count = coll.count()
             a = []
@@ -60,17 +78,17 @@ while True:
             print data_topology_json
             client.send(data_topology_json)
 
-            coll = connectDatabase(collectionsName+"_traffic")
-            #count = coll.count()
-            a = []
-            for x in coll.find():
-                a.append(x)
-            for d in a:
-                del d['_id']
-            traffic_topology_json = json.dumps(a)
-            print traffic_topology_json
-            client.send(traffic_topology_json)
-            index += 1
+            #coll = connectDatabase(collectionsName+"_traffic")
+            ##count = coll.count()
+            #a = []
+            #for x in coll.find():
+            #    a.append(x)
+            #for d in a:
+            #    del d['_id']
+            #traffic_topology_json = json.dumps(a)
+            #print traffic_topology_json
+            #client.send(traffic_topology_json)
+            #index += 1
 
         elif message2['cmd'] == "traffic":
             collectionsName = collectionsName +"_"+ str(index)
@@ -89,3 +107,12 @@ while True:
             index += 1
             #for x in coll.find():
             #    print x
+        else:
+            print message2
+            print "\n"
+            print message2['ip']
+            print "\n"
+            print message2['seed_ip']
+            print "\n"
+            print message2['com']
+            print "\n"
