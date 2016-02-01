@@ -25,3 +25,9 @@ R5
 Cisco IOS Software, 3700 Software (C3725-ADVENTERPRISEK9-M), Version 12.4(15)T10, RELEASE SOFTWARE (fc3)Technical Support: http://www.cisco.com/techsupportCopyright (c) 1986-2009 by Cisco Systems, Inc.Compiled Mon 14-Sep-09 15:53 by prod_rel_team
 192.168.5.2,FastEthernet0/0
 R3,FastEthernet0/0
+
+
+router_name
+detail
+interface
+cdp_interface

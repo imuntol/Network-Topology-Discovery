@@ -4,8 +4,10 @@ from pymongo import MongoClient
 import datetime
 from datetime import datetime
 import time
-
-#email = "y1moretime@gmail.com"
+#import router as router
+#import test_switch as switch
+import check_device as check
+import topology as topo
 
 community = "test"
 your_ip = "192.168.1.1"
@@ -108,6 +110,8 @@ def router(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community):
     interface_data = reArrange(getData(command(community,ip,IFMIB_ifDescr)))
     #traffic_data = reArrange(getData(command(community,ip,IFMIB_ifInOctets)))
 
+    IPMIB_ipAdEntNetMask = ".1.3.6.1.2.1.4.20.1.3"
+
     ##find cdp neighbors
     name_cdp = reArrange(getData(command(community,ip,CISCOCDPMIB_cdpCacheDeviceId)))
     interface_cdp = reArrange(getData(command(community,ip,CISCOCDPMIB_cdpCacheDevicePort)))
@@ -168,29 +172,7 @@ def router(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community):
     writeFile(a,filename)
     return done_list,notdone_list,index
 
-def topology(your_ip,ip,community):
-    done_list = []
-    notdone_list = []
-    newData = []
-    #newCDP = []
-    ipTraffic = []
-    index = 0
 
-    start_time = time.time()
-    collectionsName = name()
-    coll = connectDatabase(collectionsName)
-    filename = makeFile(collectionsName)
-    done_list.append(your_ip)
-    ipTraffic.append(ip)
-    done_list,notdone_list,index = router(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community)
-    while(notdone_list):
-        index += 1
-        ip = notdone_list.pop()
-        ipTraffic.append(ip)
-        #print ip
-        done_list,notdone_list,index = router(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community)
-    print("--- %s seconds ---" % (time.time() - start_time))
-    return community,ipTraffic,collectionsName
 
 #community,ipTraff,dbname = topology(your_ip,ip,community)
 #print "\n"

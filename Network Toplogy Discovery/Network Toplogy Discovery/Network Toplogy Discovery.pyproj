@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>867144f9-2d18-43db-bc2d-4d8f945b56b0</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>socket.py</StartupFile>
+    <StartupFile>test.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -22,17 +22,26 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Network_Toplogy_Discovery.py" />
-    <Compile Include="socket.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="socket_test.py">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="test.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="test_mongoDB_done.py">
+    <Compile Include="test_switch.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="topology.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="test_router.py" />
+    <Compile Include="socket.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="test_socket.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="check_device.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="router.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="test_traffic.py">

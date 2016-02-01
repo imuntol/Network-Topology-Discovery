@@ -9,7 +9,10 @@ from datetime import datetime
 import time
 import json
 import test_traffic as traffic
-import test_mongoDB_done as topology
+import router as router
+import test_switch as switch
+import check_device as check
+import topology as topo
 
 
 
@@ -22,7 +25,6 @@ def connectDatabase(collectionsName):
 
 
 a = []
-
 Client = "10.20.21.194"
 Client_port = 50000
 Host = "10.20.21.40"
@@ -45,13 +47,6 @@ while True:
     #client.send(str.encode('Welcome to my Chat room!'))
 
     index = 1
-
-    #test send
-    #sc.send("Test ppppppppppppppppppp")
-    #test = s.recv(Buff_size)
-    #print test
-    #sc.close
-
     while True:
         #message = json.dumps({"cmd":"start","ip":"192.168.1.1","seed_ip":"192.168.1.2","com":"test"})
         message = client.recv(Buff_size)
@@ -64,7 +59,7 @@ while True:
             ip = message2['ip']
             seed_ip = message2['seed_ip']
             community = message2['com']
-            #community,ipTraffic,collectionsName = topology.topology(ip,seed_ip,community)
+            #community,ipTraffic,collectionsName = r.topology(ip,seed_ip,community)
             #traffic.traffic(community,ipTraffic,collectionsName)
             collectionsName = "Thu26Nov2015_011006"
             coll = connectDatabase(collectionsName)
@@ -77,18 +72,6 @@ while True:
             data_topology_json = json.dumps(a)
             print data_topology_json
             client.send(data_topology_json)
-
-            #coll = connectDatabase(collectionsName+"_traffic")
-            ##count = coll.count()
-            #a = []
-            #for x in coll.find():
-            #    a.append(x)
-            #for d in a:
-            #    del d['_id']
-            #traffic_topology_json = json.dumps(a)
-            #print traffic_topology_json
-            #client.send(traffic_topology_json)
-            #index += 1
 
         elif message2['cmd'] == "traffic":
             collectionsName = collectionsName +"_"+ str(index)
@@ -108,11 +91,4 @@ while True:
             #for x in coll.find():
             #    print x
         else:
-            print message2
-            print "\n"
-            print message2['ip']
-            print "\n"
-            print message2['seed_ip']
-            print "\n"
-            print message2['com']
-            print "\n"
+            print message2      
