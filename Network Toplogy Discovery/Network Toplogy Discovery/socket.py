@@ -25,10 +25,10 @@ def connectDatabase(collectionsName):
 
 
 a = []
-Client = "10.20.21.194"
-Client_port = 50000
-Host = "10.20.21.40"
-Port = 54500
+Client = "192.168.0.100"
+Client_port = 50001
+Host = "192.168.0.106"
+Port = 50000
 Buff_size = 1024
 
 #server
@@ -57,11 +57,14 @@ while True:
         message2 = json.loads(message)
         if message2['cmd'] == "start":
             ip = message2['ip']
+            print ip
             seed_ip = message2['seed_ip']
+            print seed_ip
             community = message2['com']
+            print community
             #community,ipTraffic,collectionsName = r.topology(ip,seed_ip,community)
             #traffic.traffic(community,ipTraffic,collectionsName)
-            collectionsName = "Thu26Nov2015_011006"
+            collectionsName = "Thu04Feb2016_232520"
             coll = connectDatabase(collectionsName)
             #count = coll.count()
             a = []

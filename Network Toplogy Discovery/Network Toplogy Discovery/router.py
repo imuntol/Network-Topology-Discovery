@@ -19,6 +19,7 @@ SNMPv2MIB_sysDescr = ".1.3.6.1.2.1.1.1"
 IPMIB_ipAdEntAddr = ".1.3.6.1.2.1.4.20.1.1"
 IPMIB_ipAdEntIfIndex = ".1.3.6.1.2.1.4.20.1.2"
 IFMIB_ifDescr = ".1.3.6.1.2.1.2.2.1.2"
+IPMIB_ipAdEntNetMask = ".1.3.6.1.2.1.4.20.1.3"
 
 IFMIB_ifInOctets = ".1.3.6.1.2.1.2.2.1.10"
 IFMIB_ifOnOctets = ".1.3.6.1.2.1.2.2.1.16"
@@ -106,11 +107,12 @@ def router(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community):
     name_data = reArrange(getData(command(community,ip,SNMPv2MIB_sysName)))
     detail_data = detail(getData(command(community,ip,SNMPv2MIB_sysDescr)))
     ip_data = reArrange(getData(command(community,ip,IPMIB_ipAdEntAddr)))
+    subnet_data = reArrange(getData(command(community,ip,IPMIB_ipAdEntNetMask)))
     index_data = reArrange(getData(command(community,ip,IPMIB_ipAdEntIfIndex)))
     interface_data = reArrange(getData(command(community,ip,IFMIB_ifDescr)))
     #traffic_data = reArrange(getData(command(community,ip,IFMIB_ifInOctets)))
 
-    IPMIB_ipAdEntNetMask = ".1.3.6.1.2.1.4.20.1.3"
+    #IPMIB_ipAdEntNetMask = ".1.3.6.1.2.1.4.20.1.3"
 
     ##find cdp neighbors
     name_cdp = reArrange(getData(command(community,ip,CISCOCDPMIB_cdpCacheDeviceId)))
@@ -133,11 +135,16 @@ def router(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community):
         form = {"index":str(index),"router_name":str(name_data[i]),"detail":str(detail_data[i])}
         coll.insert_one(form)
 
+    ## type
+    type = []
+    type.append("router")
+    coll.update({"index":str(index)},{'$set':{"type":"router"}})
+
     ## update interface_detial
     newData = []
     for i in range(0,len(ip_data)):
         done_list.append(ip_data[i])
-        newData.append(ip_data[i] + "," + interface_data[int(index_data[i])-1])
+        newData.append(ip_data[i] + "," + subnet_data[i] + "," + interface_data[int(index_data[i])-1])
         coll.update({"index":str(index)},{'$set':{"interface"+str(i):str(newData[i])}}) 
 
     print "interface : " + str(newData)
@@ -168,7 +175,7 @@ def router(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community):
 
     print "information cdp : " + str(newCDP)
     print "\n"
-    a = name_data + detail_data + newData + newCDP
+    a = name_data + detail_data + type + newData + newCDP
     writeFile(a,filename)
     return done_list,notdone_list,index
 
