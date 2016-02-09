@@ -5,15 +5,14 @@ import datetime
 from datetime import datetime
 import time
 import router as router
-#import test_switch as switch
-import check_device as check
-import topology as topo
+import portstate as ps
+import interfacevlan as iv
 
 ##a = ['Vlan1', 'Vlan100', 'Vlan200', 'FastEthernet0/1', 'FastEthernet0/2', 'FastEthernet0/3', 'FastEthernet0/4', 'FastEthernet0/5', 'FastEthernet0/6', 'FastEthernet0/7', 'FastEthernet0/8', 'FastEthernet0/9', 'FastEthernet0/10', 'FastEthernet0/11', 'FastEthernet0/12', 'FastEthernet0/13', 'FastEthernet0/14', 'FastEthernet0/15', 'FastEthernet0/16', 'FastEthernet0/17', 'FastEthernet0/18', 'FastEthernet0/19', 'FastEthernet0/20', 'FastEthernet0/21', 'FastEthernet0/22', 'FastEthernet0/23', 'FastEthernet0/24', 'GigabitEthernet0/1', 'GigabitEthernet0/2', 'Null0']
 
-community = "test"
-your_ip = "192.168.100.50"
-ip = "192.168.100.1"
+#community = "test"
+#your_ip = "192.168.100.50"
+#ip = "192.168.100.1"
 
 ### OID ###
 SNMPv2MIB_sysName = ".1.3.6.1.2.1.1.5"
@@ -39,10 +38,10 @@ BRIDGEMIB_dot1dStpPort = "1.3.6.1.2.1.17.2.15.1.1" #stp port
 BRIDGEMIB_dot1dStpPortState = ".1.3.6.1.2.1.17.2.15.1.3" #stp port state
 #BRIDGEMIB_dot1dBasePort = ".1.3.6.1.2.1.17.1.4.1.1" #
 BRIDGEMIB_dot1dBasePortIfIndex = ".1.3.6.1.2.1.17.1.4.1.2" # port index
-
 #IFMIB_ifIndex
 #IFMIB_ifDescr
 
+CISCOVTPMIB_vlanTrunkPortDynamicStatus = ".1.3.6.1.4.1.9.9.46.1.6.1.1.14" # check trunk port
 #def switch(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community):
   
 
@@ -60,9 +59,9 @@ BRIDGEMIB_dot1dBasePortIfIndex = ".1.3.6.1.2.1.17.1.4.1.2" # port index
 #print "------------------------------------------------"
 
 def switch(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community):
-
+    
     name_data = router.reArrange(router.getData(router.command(community,ip,SNMPv2MIB_sysName)))
-    detail_data = router.detail(router.getData(router.command(router.community,ip,SNMPv2MIB_sysDescr)))
+    detail_data = router.detail(router.getData(router.command(community,ip,SNMPv2MIB_sysDescr)))
     ip_data = router.reArrange(router.getData(router.command(community,ip,IPMIB_ipAdEntAddr)))
     subnet_data = router.reArrange(router.getData(router.command(community,ip,IPMIB_ipAdEntNetMask)))
     index_data = router.reArrange(router.getData(router.command(community,ip,IPMIB_ipAdEntIfIndex)))
@@ -73,24 +72,41 @@ def switch(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community):
     interface_cdp = router.reArrange(router.getData(router.command(community,ip,CISCOCDPMIB_cdpCacheDevicePort)))
     ip_cdp = router.reArrange(router.getData(router.command(community,ip,IPMIB_ipNetToMediaNetAddress)))
 
-    vlan_interface = router.reArrange(router.getData(router.command(community,ip,CISCOSMI_ciscoMgmt)))
     ### forwarding blocking
     stp_port = router.reArrange(router.getData(router.command(community,ip,BRIDGEMIB_dot1dStpPort)))
-    stp_portstate = router.reArrange(router.getData(router.command(community,ip,BRIDGEMIB_dot1dStpPortState)))
-    stp_portindex = router.reArrange(router.getData(router.command(community,ip,BRIDGEMIB_dot1dBasePortIfIndex)))
-    vlan_index = router.reArrange(router.getData(router.command(community,ip,IFMIB_ifIndex)))
+    stp_portstate = ps.New_reArrange(router.getData(router.command(community,ip,BRIDGEMIB_dot1dStpPortState)))
+    stp_portindex = ps.New_reArrange(router.getData(router.command(community,ip,BRIDGEMIB_dot1dBasePortIfIndex)))
+    ps_interface_data = ps.New_reArrange(router.getData(router.command(community,ip,IFMIB_ifDescr)))
+    ###
+    ### vlan vlan_name
+    interface_data
     vtp_vlanname = router.reArrange(router.getData(router.command(community,ip,CISCOVTPMIB_vtpVlanName)))
-    #vlan_interface
-    #interface_data
+    ###
+    ### interface vlan
+    iv_interface_data = iv.New_reArrange(router.getData(router.command(community,ip,IFMIB_ifDescr)))
+    trunk = iv.New_reArrange(router.getData(router.command(community,ip,CISCOVTPMIB_vlanTrunkPortDynamicStatus)))
+    vlan_interface = iv.New_reArrange_vlan(router.getData(router.command(community,ip,CISCOSMI_ciscoMgmt)))
+    ###
 
-    #print stp_port
-    #print stp_portstate
-    #print stp_portindex
-    #print vlan_index
-    #print vlan_interface
-    #print interface_data
+    print "name : " + str(name_data)
+    print "detail : " + str(detail_data)
+    print "------------------------------------------------"
+    print "ip : " + str(ip_data)
+    print "subnet : " + str(subnet_data)
+    print "index : " + str(index_data)
+    print "interface_data : " + str(interface_data)
+    print "------------------------------------------------"
+    print "name of neighbors : " + str(name_cdp)
+    print "interface of neighbors : " + str(interface_cdp)
+    print "ip of neighbors : " + str(ip_cdp)
+    print "------------------------------------------------"
 
-
+    #print stp_port #"1.3.6.1.2.1.17.2.15.1.1"
+    #print stp_portstate #".1.3.6.1.2.1.17.2.15.1.3"
+    #print stp_portindex #".1.3.6.1.2.1.17.1.4.1.2"
+    #print vlan_index #.1.3.6.1.2.1.2.2.1.1
+    #print vlan_interface #"1.3.6.1.4.1.9.9.46.1.3.1.1.4"
+    #print interface_data #.1.3.6.1.2.1.2.2.1.2
 
     ## add to database : index,switch_name,detail
     for i in range(0,len(name_data)):
@@ -118,29 +134,24 @@ def switch(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community):
 
     ## interface , vlan
     interface_vlan = []
-    new_interface_data = [i for i in interface_data if not("Vlan" in i or "Null" in i)]
-    for i in range(0,len(new_interface_data)):
-        interface_vlan.append(new_interface_data[i] + "," + vlan_interface[i])
+    interface_vlan = iv.interfaceVlan(iv_interface_data,trunk,vlan_interface)
+    for i in range(0,len(interface_vlan)):
         coll.update({"index":str(index)},{'$set':{"interface_vlan" + str(i):str(interface_vlan[i])}})
+    
 
     ## interface , state
     interface_state = []
-    for i in range(0,len(stp_port)):
-        if stp_portindex[i] == "No Such Instance currently exists at this OID":
-            break
-        else:
-            for j in range(0,len(vlan_index)):
-                if stp_portindex[(int(stp_port[i])-1)] == vlan_index[j]:
-                    interface_state.append(str(interface_data[j]) + "," + str(stp_portstate[i]))
-                    coll.update({"index":str(index)},{'$set':{"interface_state"+str(i):str(interface_state[i])}})
-                    break
-                    
+    interface_state = ps.portState(stp_port,stp_portstate,stp_portindex,ps_interface_data)
+    for i in range(0,len(interface_state)):
+        coll.update({"index":str(index)},{'$set':{"interface_state" + str(i):str(interface_state[i])}})
 
     ## check ip that already get data
     for j in range(0,len(done_list)):
         if done_list[j] in ip_cdp:
             ip_cdp.remove(str(done_list[j]))
             j = j-1
+
+
     ## make list for ip that didnt get data yet
     for k in range(0,len(ip_cdp)):
         notdone_list.append(ip_cdp[k])
@@ -151,6 +162,10 @@ def switch(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community):
             newCDP.append(name_cdp[i] + "," + interface_cdp[i])
             coll.update({"index":str(index)},{'$set':{"cdp_interface"+str(i):str(newCDP[i])}}) 
 
+    print "done : " + str(done_list)
+    print "##############################"
+    print "Not donw : " + str(notdone_list)
     a = name_data + detail_data + type + vlan_name + newData + interface_vlan + interface_state + newCDP
+    #a = name_data + detail_data + type + vlan_name + newData + interface_vlan  + newCDP
     router.writeFile(a,filename)
     return done_list,notdone_list,index

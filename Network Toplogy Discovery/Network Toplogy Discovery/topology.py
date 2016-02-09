@@ -7,11 +7,6 @@ import time
 import router as router
 import test_switch as switch
 import check_device as check
-#import topology as topo
-
-community = "test"
-your_ip = "192.168.1.1"
-ip = "192.168.1.2"
 
 ### OID ###
 SNMPv2MIB_sysName = ".1.3.6.1.2.1.1.5"
@@ -40,6 +35,7 @@ BRIDGEMIB_dot1dBasePortIfIndex = ".1.3.6.1.2.1.17.1.4.1.2" # port index
 #IFMIB_ifDescr
 
 def topology(your_ip,ip,community):
+    print "your ip : " + str(your_ip) +" ip device : " + str(ip) + " community : " + str(community)
     done_list = []
     notdone_list = []
     newData = []
@@ -53,8 +49,12 @@ def topology(your_ip,ip,community):
     done_list.append(your_ip)
     ipTraffic.append(ip)
 
+    print "done list : " + str(done_list)
+    print "not done list : " + str(notdone_list)
+
     code = check.findCode(community,ip)
     device = check.checkDevice(code)
+    print "type : " + str(device)
     if device == "router":
         done_list,notdone_list,index = router.router(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community)
     elif device == "switch":
@@ -65,12 +65,22 @@ def topology(your_ip,ip,community):
     while(notdone_list):
         index += 1
         ip = notdone_list.pop()
+       
+        print "ip " + str(ip)
+        print "done list : " + str(done_list)
+        print "not done list : " + str(notdone_list)
+
         ipTraffic.append(ip)
-        if device == "router":
-            done_list,notdone_list,index = router.router(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community)
-        elif device == "switch":
-            done_list,notdone_list,index = switch.switch(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community)
+        code = check.findCode(community,ip)
+        if code == []:
+            print "skip this ip"
         else:
-            print "dont know the type of device"
+            device = check.checkDevice(code)
+            if device == "router":
+                done_list,notdone_list,index = router.router(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community)
+            elif device == "switch":
+                done_list,notdone_list,index = switch.switch(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community)
+            else:
+                print "dont know the type of device"
     print("--- %s seconds ---" % (time.time() - start_time))
     return community,ipTraffic,collectionsName

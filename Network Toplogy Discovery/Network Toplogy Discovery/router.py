@@ -4,14 +4,11 @@ from pymongo import MongoClient
 import datetime
 from datetime import datetime
 import time
-#import router as router
-#import test_switch as switch
-import check_device as check
-import topology as topo
+import interfacedetail as id
 
-community = "test"
-your_ip = "192.168.1.1"
-ip = "192.168.1.2"
+#community = "test"
+#your_ip = "192.168.1.1"
+#ip = "192.168.1.2"
 
 ### OID ###
 SNMPv2MIB_sysName = ".1.3.6.1.2.1.1.5"
@@ -51,14 +48,17 @@ def getData(command):
     return data
 
 def detail(data):
-    data[0] = data[0].split("G:")[1];
-    data[0] = data[0].strip()
-    temp = ""
-    for i in range(0,len(data)):
-        temp = temp + data[i]
-    data = []
-    data.append(temp)
-    #print data
+    if data == []:
+        print "not router or switch"
+    else:
+        data[0] = data[0].split("G:")[1];
+        data[0] = data[0].strip()
+        temp = ""
+        for i in range(0,len(data)):
+            temp = temp + data[i]
+        data = []
+        data.append(temp)
+        #print data
     return data
 
 def reArrange(data):
@@ -109,25 +109,37 @@ def router(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community):
     ip_data = reArrange(getData(command(community,ip,IPMIB_ipAdEntAddr)))
     subnet_data = reArrange(getData(command(community,ip,IPMIB_ipAdEntNetMask)))
     index_data = reArrange(getData(command(community,ip,IPMIB_ipAdEntIfIndex)))
-    interface_data = reArrange(getData(command(community,ip,IFMIB_ifDescr)))
+    interface_data = id.New_reArrange(getData(command(community,ip,IFMIB_ifDescr)))
+    #ip_data = reArrange(getData(command(community,ip,IPMIB_ipAdEntAddr)))
+    #subnet_data = reArrange(getData(command(community,ip,IPMIB_ipAdEntNetMask)))
+    #index_data = reArrange(getData(command(community,ip,IPMIB_ipAdEntIfIndex)))
+    #interface_data = reArrange(getData(command(community,ip,IFMIB_ifDescr)))
     #traffic_data = reArrange(getData(command(community,ip,IFMIB_ifInOctets)))
 
-    #IPMIB_ipAdEntNetMask = ".1.3.6.1.2.1.4.20.1.3"
+    
 
     ##find cdp neighbors
     name_cdp = reArrange(getData(command(community,ip,CISCOCDPMIB_cdpCacheDeviceId)))
     interface_cdp = reArrange(getData(command(community,ip,CISCOCDPMIB_cdpCacheDevicePort)))
     ip_cdp = reArrange(getData(command(community,ip,IPMIB_ipNetToMediaNetAddress)))
 
-    print "interface_data : " + str(interface_data)
-    print "name of neighbors : " + str(name_cdp)
-    print "interface of neighbors : " + str(interface_cdp)
-    print "ip of neighbors : " + str(ip_cdp)
+   
+    
 
-    print "------------------------------------------------"
+    
 
     print "name : " + str(name_data)
     print "detail : " + str(detail_data)
+    print "------------------------------------------------"
+    print "ip : " + str(ip_data)
+    print "subnet : " + str(subnet_data)
+    print "index : " + str(index_data)
+    print "interface_data : " + str(interface_data)
+    print "------------------------------------------------"
+    
+    print "name of neighbors : " + str(name_cdp)
+    print "interface of neighbors : " + str(interface_cdp)
+    print "ip of neighbors : " + str(ip_cdp)
 
 
     ## add to database : index,router_name,detail
@@ -141,30 +153,31 @@ def router(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community):
     coll.update({"index":str(index)},{'$set':{"type":"router"}})
 
     ## update interface_detial
+  
     newData = []
-    for i in range(0,len(ip_data)):
+    newData = id.interfacedetail(ip_data,subnet_data,index_data,interface_data)
+    for i in range(0,len(newData)):
         done_list.append(ip_data[i])
-        newData.append(ip_data[i] + "," + subnet_data[i] + "," + interface_data[int(index_data[i])-1])
         coll.update({"index":str(index)},{'$set':{"interface"+str(i):str(newData[i])}}) 
 
-    print "interface : " + str(newData)
+    #print "interface : " + str(newData)
 
-    print "ip of neighbors(befor) : " + str(ip_cdp)
+    #print "ip of neighbors(befor) : " + str(ip_cdp)
     ## check ip that already get data
     for j in range(0,len(done_list)):
         if done_list[j] in ip_cdp:
             ip_cdp.remove(str(done_list[j]))
             j = j-1
     
-    print "ip of neighbors : " + str(ip_cdp)
-    print "done list : " + str(done_list)
+    #print "ip of neighbors : " + str(ip_cdp)
+    #print "done list : " + str(done_list)
 
     ## make list for ip that didnt get data yet
     for k in range(0,len(ip_cdp)):
         notdone_list.append(ip_cdp[k])
     #print notdone_list
 
-    print "not done list : " + str(notdone_list)
+    #print "not done list : " + str(notdone_list)
 
     
     ## update cdp_interface

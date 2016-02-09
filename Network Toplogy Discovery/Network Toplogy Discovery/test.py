@@ -4,9 +4,6 @@ from pymongo import MongoClient
 import datetime
 from datetime import datetime
 import time
-import router as router
-import test_switch as switch
-import check_device as check
 import topology as topo
 
 community = "test"

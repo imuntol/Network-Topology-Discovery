@@ -26,9 +26,9 @@ CISCOCDPMIB_cdpCacheDevicePort = ".1.3.6.1.4.1.9.9.23.1.2.1.1.7"
 #ipTraffic = ['192.168.1.2', '192.168.2.2', '192.168.4.2', '192.168.3.2', '192.168.5.2']
 #community = "test"
 #databaseName = "abcd"
-router_list_end = ['12000','10700','10000','7600','7500','7300','7200','3800','3700','3600','3200','2800','2600','2500','1900','1800','1700','1000','800']
+router_list_end = ['12000','10700','10000','7600','7500','7300','7200','3800','3725','3700','3600','3200','2800','2600','2500','1900','1800','1700','1000','800']
 router_list = ['12000','7600','7500','7300','7200','7000','6500','5900','5500','5500','4000','3900','3800','2900','2800','2000','1900','1800','1000','900','800','500']
-switch_list_end = ['8110','6200','6100','6000','8600','8500','8400','6500','4000','3750','3750-E','3560-E','3550','2975','2960','2955','2950','2940','2918','2900','2600','2360','2350','1800','1600','1538','1500','500']
+switch_list_end = ['8110','6200','6100','6000','8600','8500','8400','6500','4000','3750','3750-E','3560-E','3550','2975','2960','2955','2950','2940','2918','2900','2360','2350','1800','1600','1538','1500','500']
 switch_list = ['7000','6800','6500','4900','4500','4500-X','3850','3800X','3750','3750-X','3650','3560','3560-C','3560-CX','3560-X','3400X','2960-Plus','2960-S','2960-SF','2960-X','2960-C','2960-CX','2500']
 #community,ipTraffic,collectionsName = topology.topology("192.168.1.1","192.168.1.2","test")
 #traffic.traffic(community,ipTraffic,collectionsName)
@@ -36,12 +36,23 @@ switch_list = ['7000','6800','6500','4900','4500','4500-X','3850','3800X','3750'
 def findCode(community,ip):
     command = router.command(community,ip,SNMPv2MIB_sysDescr)
     data = router.getData(command)
-    re_data = router.detail(data)
-    re_data = re_data[0].split(",");
-    re_data = re_data[1].strip()
-    re_data = re_data.split(" ");
-    re_data = re_data[0].strip("C");
-    return re_data
+    print data
+    if (data == []):
+        pass
+    else:
+        data = router.detail(data)
+        #print "data[0] : "+ str(data[0])
+        data = data[0].split("(C")[1]
+        #print "datasadasdasd : "+ str(data)
+        data = data.split("-")[0]
+        print data
+        #print "data : "+ str(data)
+        #data = data[0].split(",");
+        #data = data[1].strip()
+        #data = data.split(" ");
+        #data = data[0].strip("C");
+    
+    return data
 
 def checkDevice(code):
     device = "none"
