@@ -36,16 +36,18 @@ BRIDGEMIB_dot1dBasePortIfIndex = ".1.3.6.1.2.1.17.1.4.1.2" # port index
 
 def topology(your_ip,ip,community):
     print "your ip : " + str(your_ip) +" ip device : " + str(ip) + " community : " + str(community)
+    
     done_list = []
     notdone_list = []
     newData = []
     ipTraffic = []
     index = 0
-
+    print "index : " + str(index)
     start_time = time.time()
     collectionsName = router.name()
     coll = router.connectDatabase(collectionsName)
     filename = router.makeFile(collectionsName)
+
     done_list.append(your_ip)
     ipTraffic.append(ip)
 
@@ -53,34 +55,41 @@ def topology(your_ip,ip,community):
     print "not done list : " + str(notdone_list)
 
     code = check.findCode(community,ip)
-    device = check.checkDevice(code)
-    print "type : " + str(device)
-    if device == "router":
-        done_list,notdone_list,index = router.router(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community)
-    elif device == "switch":
-        done_list,notdone_list,index = switch.switch(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community)
+    if code == []:
+        print "skip this ip"
+        index -=1
     else:
-        print "dont know the type of device"
-    
-    while(notdone_list):
-        index += 1
-        ip = notdone_list.pop()
-       
-        print "ip " + str(ip)
-        print "done list : " + str(done_list)
-        print "not done list : " + str(notdone_list)
-
-        ipTraffic.append(ip)
-        code = check.findCode(community,ip)
-        if code == []:
-            print "skip this ip"
+        device = check.checkDevice(code)
+        print "type : " + str(device)
+        if device == "router":
+            done_list,notdone_list,index = router.router(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community)
+        elif device == "switch":
+            done_list,notdone_list,index = switch.switch(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community)
         else:
-            device = check.checkDevice(code)
-            if device == "router":
-                done_list,notdone_list,index = router.router(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community)
-            elif device == "switch":
-                done_list,notdone_list,index = switch.switch(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community)
+            print "dont know the type of device"
+    
+        while(notdone_list):
+            index += 1
+            ip = notdone_list.pop()
+            done_list.append(ip)
+            ipTraffic.append(ip)
+            print "index : " + str(index)
+            print "ip " + str(ip)
+            print "done list : " + str(done_list)
+            print "not done list : " + str(notdone_list)
+            code = check.findCode(community,ip)
+            if code == []:
+                print "skip this ip"
+                index -=1
             else:
-                print "dont know the type of device"
+                device = check.checkDevice(code)
+                print "type : " + str(device)
+                if device == "router":
+                    done_list,notdone_list,index = router.router(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community)
+                elif device == "switch":
+                    done_list,notdone_list,index = switch.switch(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community)
+                else:
+                    print "dont know the type of device"
+            print index
     print("--- %s seconds ---" % (time.time() - start_time))
     return community,ipTraffic,collectionsName

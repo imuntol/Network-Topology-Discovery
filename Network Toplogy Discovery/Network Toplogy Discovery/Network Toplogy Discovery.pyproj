@@ -28,6 +28,12 @@
     <Compile Include="interfacedetail.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="done_notdontlist.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="module1.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="portstate.py">
       <SubType>Code</SubType>
     </Compile>

@@ -5,6 +5,7 @@ import datetime
 from datetime import datetime
 import time
 import interfacedetail as id
+import done_notdontlist as fl
 
 #community = "test"
 #your_ip = "192.168.1.1"
@@ -156,46 +157,24 @@ def router(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community):
   
     newData = []
     newData = id.interfacedetail(ip_data,subnet_data,index_data,interface_data)
-    for i in range(0,len(newData)):
+    for i in range(0,len(ip_data)):
         done_list.append(ip_data[i])
         coll.update({"index":str(index)},{'$set':{"interface"+str(i):str(newData[i])}}) 
 
-    #print "interface : " + str(newData)
 
-    #print "ip of neighbors(befor) : " + str(ip_cdp)
-    ## check ip that already get data
-    for j in range(0,len(done_list)):
-        if done_list[j] in ip_cdp:
-            ip_cdp.remove(str(done_list[j]))
-            j = j-1
-    
-    #print "ip of neighbors : " + str(ip_cdp)
-    #print "done list : " + str(done_list)
+    ## donelist notdonelist
+    done_list,notdone_list = fl.findlist(ip_data,ip_cdp,done_list,notdone_list)
 
-    ## make list for ip that didnt get data yet
-    for k in range(0,len(ip_cdp)):
-        notdone_list.append(ip_cdp[k])
-    #print notdone_list
 
-    #print "not done list : " + str(notdone_list)
-
-    
     ## update cdp_interface
     newCDP = []    
     for i in range(0,len(name_cdp)):
         newCDP.append(name_cdp[i] + "," + interface_cdp[i])
         coll.update({"index":str(index)},{'$set':{"cdp_interface"+str(i):str(newCDP[i])}}) 
 
-    print "information cdp : " + str(newCDP)
-    print "\n"
+    print "done : " + str(done_list)
+    print "##############################"
+    print "Not donw : " + str(notdone_list)
     a = name_data + detail_data + type + newData + newCDP
     writeFile(a,filename)
     return done_list,notdone_list,index
-
-
-
-#community,ipTraff,dbname = topology(your_ip,ip,community)
-#print "\n"
-#print "ipTraff : " + str(ipTraff)
-#print "\n"
-#print "dbname : " + str(dbname)

@@ -36,7 +36,7 @@ switch_list = ['7000','6800','6500','4900','4500','4500-X','3850','3800X','3750'
 def findCode(community,ip):
     command = router.command(community,ip,SNMPv2MIB_sysDescr)
     data = router.getData(command)
-    print data
+    #print data
     if (data == []):
         pass
     else:
@@ -45,7 +45,7 @@ def findCode(community,ip):
         data = data[0].split("(C")[1]
         #print "datasadasdasd : "+ str(data)
         data = data.split("-")[0]
-        print data
+        #print data
         #print "data : "+ str(data)
         #data = data[0].split(",");
         #data = data[1].strip()

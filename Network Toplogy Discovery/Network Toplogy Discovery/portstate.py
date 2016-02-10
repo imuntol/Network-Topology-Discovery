@@ -21,9 +21,6 @@ BRIDGEMIB_dot1dStpPort = "1.3.6.1.2.1.17.2.15.1.1" #stp port
 BRIDGEMIB_dot1dStpPortState = ".1.3.6.1.2.1.17.2.15.1.3" #stp port state
 BRIDGEMIB_dot1dBasePortIfIndex = ".1.3.6.1.2.1.17.1.4.1.2" # port index
 
-
-CISCOVTPMIB_vlanTrunkPortDynamicStatus = ".1.3.6.1.4.1.9.9.46.1.6.1.1.14" # check trunk port
-
 def command(community,ip,oid):
     command = "snmpwalk -v 2c -c" + " " + community + " " + ip + " " + oid
     return command
@@ -69,8 +66,11 @@ def New_reArrange(data):
 def reArrange(data):
     for i in range(0,len(data)):
         data[i] = data[i].split("=")[1];
-        data[i] = data[i].split(":")[1];
-        data[i] = data[i].split(" ")[1];
+        if data[0] == " No Such Instance currently exists at this OID":
+            pass
+        else:
+            data[i] = data[i].split(":")[1];
+            data[i] = data[i].split(" ")[1];
     #print data
     return data
 
@@ -86,10 +86,11 @@ def portState(stp_port,stp_portstate,stp_portindex,interface_data):
     #print stp_portindex
     #print interface_data
     #print "----------------------------------------------"
-    if stp_port == []:
-        pass
+    interface_state = []
+    if stp_port == [" No Such Instance currently exists at this OID"]:
+        interface_state.append("No Vlan Default")
     else:
-        interface_state = []
+        
         r,c = getRowCol(stp_port)
         ro,co = getRowCol(stp_portindex)
         row,col = getRowCol(interface_data)

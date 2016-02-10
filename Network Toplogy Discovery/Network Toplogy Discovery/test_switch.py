@@ -7,6 +7,7 @@ import time
 import router as router
 import portstate as ps
 import interfacevlan as iv
+import done_notdontlist as fl
 
 ##a = ['Vlan1', 'Vlan100', 'Vlan200', 'FastEthernet0/1', 'FastEthernet0/2', 'FastEthernet0/3', 'FastEthernet0/4', 'FastEthernet0/5', 'FastEthernet0/6', 'FastEthernet0/7', 'FastEthernet0/8', 'FastEthernet0/9', 'FastEthernet0/10', 'FastEthernet0/11', 'FastEthernet0/12', 'FastEthernet0/13', 'FastEthernet0/14', 'FastEthernet0/15', 'FastEthernet0/16', 'FastEthernet0/17', 'FastEthernet0/18', 'FastEthernet0/19', 'FastEthernet0/20', 'FastEthernet0/21', 'FastEthernet0/22', 'FastEthernet0/23', 'FastEthernet0/24', 'GigabitEthernet0/1', 'GigabitEthernet0/2', 'Null0']
 
@@ -73,13 +74,12 @@ def switch(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community):
     ip_cdp = router.reArrange(router.getData(router.command(community,ip,IPMIB_ipNetToMediaNetAddress)))
 
     ### forwarding blocking
-    stp_port = router.reArrange(router.getData(router.command(community,ip,BRIDGEMIB_dot1dStpPort)))
-    stp_portstate = ps.New_reArrange(router.getData(router.command(community,ip,BRIDGEMIB_dot1dStpPortState)))
-    stp_portindex = ps.New_reArrange(router.getData(router.command(community,ip,BRIDGEMIB_dot1dBasePortIfIndex)))
+    stp_port = ps.reArrange(ps.getData(ps.command(community,ip,BRIDGEMIB_dot1dStpPort)))
+    stp_portstate = ps.reArrange(ps.getData(ps.command(community,ip,BRIDGEMIB_dot1dStpPortState)))
+    stp_portindex = ps.reArrange(ps.getData(ps.command(community,ip,BRIDGEMIB_dot1dBasePortIfIndex)))
     ps_interface_data = ps.New_reArrange(router.getData(router.command(community,ip,IFMIB_ifDescr)))
     ###
     ### vlan vlan_name
-    interface_data
     vtp_vlanname = router.reArrange(router.getData(router.command(community,ip,CISCOVTPMIB_vtpVlanName)))
     ###
     ### interface vlan
@@ -99,6 +99,17 @@ def switch(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community):
     print "name of neighbors : " + str(name_cdp)
     print "interface of neighbors : " + str(interface_cdp)
     print "ip of neighbors : " + str(ip_cdp)
+    print "------------------------------------------------"
+    print "stp port : " + str(stp_port)
+    print "stp port state : " + str(stp_portstate)
+    print "stp port index : " + str(stp_portindex)
+    print "stp interface : " + str(ps_interface_data)
+    print "------------------------------------------------"
+    print "vlan name : " + str(vtp_vlanname)
+    print "------------------------------------------------"
+    print "interface : " + str(iv_interface_data)
+    print "trunk : " + str(trunk)
+    print "vlan : " + str(vlan_interface)
     print "------------------------------------------------"
 
     #print stp_port #"1.3.6.1.2.1.17.2.15.1.1"
@@ -145,16 +156,8 @@ def switch(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community):
     for i in range(0,len(interface_state)):
         coll.update({"index":str(index)},{'$set':{"interface_state" + str(i):str(interface_state[i])}})
 
-    ## check ip that already get data
-    for j in range(0,len(done_list)):
-        if done_list[j] in ip_cdp:
-            ip_cdp.remove(str(done_list[j]))
-            j = j-1
-
-
-    ## make list for ip that didnt get data yet
-    for k in range(0,len(ip_cdp)):
-        notdone_list.append(ip_cdp[k])
+    ## donelist notdonelist
+    done_list,notdone_list = fl.findlist(ip_data,ip_cdp,done_list,notdone_list)
 
     ## update cdp_interface
     newCDP = []
