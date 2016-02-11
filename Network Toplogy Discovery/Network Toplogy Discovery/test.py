@@ -7,8 +7,8 @@ import time
 import topology as topo
 
 community = "test"
-your_ip = "192.168.1.1"
-ip = "192.168.1.2"
+your_ip = "192.168.250.44"
+ip = "192.168.250.2"
 
 ### OID ###
 SNMPv2MIB_sysName = ".1.3.6.1.2.1.1.5"

@@ -25,9 +25,9 @@ def connectDatabase(collectionsName):
 
 
 a = []
-Client = "192.168.0.100"
+Client = "10.20.21.194"
 Client_port = 50001
-Host = "192.168.0.106"
+Host = "10.20.21.84"
 Port = 50000
 Buff_size = 1024
 

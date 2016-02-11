@@ -1,13 +1,13 @@
-import os
+﻿import os
 import pymongo
 from pymongo import MongoClient
 import datetime
 from datetime import datetime
 import time
 
-community = "test"
-your_ip = "192.168.1.1"
-ip = "192.168.1.2"
+#community = "test"
+#your_ip = "192.168.1.1"
+#ip = "192.168.1.2"
 
 ### OID ###
 IPMIB_ipAdEntAddr = ".1.3.6.1.2.1.4.20.1.1"

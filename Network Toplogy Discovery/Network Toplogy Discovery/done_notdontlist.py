@@ -1,13 +1,13 @@
-import os
+﻿import os
 import pymongo
 from pymongo import MongoClient
 import datetime
 from datetime import datetime
 import time
 
-community = "test"
-your_ip = "192.168.200.33"
-ip = "192.168.200.2"
+#community = "test"
+#your_ip = "192.168.200.33"
+#ip = "192.168.200.2"
 
 ### OID ###
 IPMIB_ipAdEntAddr = ".1.3.6.1.2.1.4.20.1.1" #ip
@@ -79,6 +79,9 @@ def findlist(ip_data,ip_cdp,done_list,notdone_list):
     for j in range(0,len(notdone_list)):
         if notdone_list[j] in ip_cdp:
             ip_cdp.remove(str(notdone_list[j]))
+    for i in range(0,len(done_list)):
+        if done_list[i] in notdone_list:
+            notdone_list.remove(str(done_list[i]))
     for k in range(0,len(ip_cdp)):
         notdone_list.append(ip_cdp[k])
 

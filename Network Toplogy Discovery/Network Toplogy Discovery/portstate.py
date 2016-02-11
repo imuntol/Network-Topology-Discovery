@@ -11,7 +11,7 @@ import time
 #import numpy as np
 
 community = "test"
-your_ip = "192.168.250.50"
+your_ip = "192.168.250.44"
 ip = "192.168.250.1"
 
 ### OID ###
@@ -104,6 +104,7 @@ def portState(stp_port,stp_portstate,stp_portindex,interface_data):
                          if index == interface_data[k][0]:
                             interface_state.append(str(interface_data[k][1]) + "," + str(stp_portstate[i][1]))
         #print "----------------------------------------------"
+    #print interface_state
     return interface_state
 
 
@@ -121,5 +122,5 @@ def portState(stp_port,stp_portstate,stp_portindex,interface_data):
 
 #a = portState(stp_port,stp_portstate,stp_portindex,interface_data)    
 #print a
-#print interface_state
+#print interface_data
                    

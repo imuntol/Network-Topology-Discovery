@@ -35,7 +35,7 @@ BRIDGEMIB_dot1dBasePortIfIndex = ".1.3.6.1.2.1.17.1.4.1.2" # port index
 #IFMIB_ifDescr
 
 def topology(your_ip,ip,community):
-    print "your ip : " + str(your_ip) +" ip device : " + str(ip) + " community : " + str(community)
+    #print "your ip : " + str(your_ip) +" ip device : " + str(ip) + " community : " + str(community)
     
     done_list = []
     notdone_list = []

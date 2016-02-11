@@ -75,8 +75,8 @@ def switch(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community):
 
     ### forwarding blocking
     stp_port = ps.reArrange(ps.getData(ps.command(community,ip,BRIDGEMIB_dot1dStpPort)))
-    stp_portstate = ps.reArrange(ps.getData(ps.command(community,ip,BRIDGEMIB_dot1dStpPortState)))
-    stp_portindex = ps.reArrange(ps.getData(ps.command(community,ip,BRIDGEMIB_dot1dBasePortIfIndex)))
+    stp_portstate = ps.New_reArrange(ps.getData(ps.command(community,ip,BRIDGEMIB_dot1dStpPortState)))
+    stp_portindex = ps.New_reArrange(ps.getData(ps.command(community,ip,BRIDGEMIB_dot1dBasePortIfIndex)))
     ps_interface_data = ps.New_reArrange(router.getData(router.command(community,ip,IFMIB_ifDescr)))
     ###
     ### vlan vlan_name
@@ -88,29 +88,29 @@ def switch(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community):
     vlan_interface = iv.New_reArrange_vlan(router.getData(router.command(community,ip,CISCOSMI_ciscoMgmt)))
     ###
 
-    print "name : " + str(name_data)
-    print "detail : " + str(detail_data)
-    print "------------------------------------------------"
-    print "ip : " + str(ip_data)
-    print "subnet : " + str(subnet_data)
-    print "index : " + str(index_data)
-    print "interface_data : " + str(interface_data)
-    print "------------------------------------------------"
-    print "name of neighbors : " + str(name_cdp)
-    print "interface of neighbors : " + str(interface_cdp)
-    print "ip of neighbors : " + str(ip_cdp)
-    print "------------------------------------------------"
-    print "stp port : " + str(stp_port)
-    print "stp port state : " + str(stp_portstate)
-    print "stp port index : " + str(stp_portindex)
-    print "stp interface : " + str(ps_interface_data)
-    print "------------------------------------------------"
-    print "vlan name : " + str(vtp_vlanname)
-    print "------------------------------------------------"
-    print "interface : " + str(iv_interface_data)
-    print "trunk : " + str(trunk)
-    print "vlan : " + str(vlan_interface)
-    print "------------------------------------------------"
+    #print "name : " + str(name_data)
+    #print "detail : " + str(detail_data)
+    #print "------------------------------------------------"
+    #print "ip : " + str(ip_data)
+    #print "subnet : " + str(subnet_data)
+    #print "index : " + str(index_data)
+    #print "interface_data : " + str(interface_data)
+    #print "------------------------------------------------"
+    #print "name of neighbors : " + str(name_cdp)
+    #print "interface of neighbors : " + str(interface_cdp)
+    #print "ip of neighbors : " + str(ip_cdp)
+    #print "------------------------------------------------"
+    #print "stp port : " + str(stp_port)
+    #print "stp port state : " + str(stp_portstate)
+    #print "stp port index : " + str(stp_portindex)
+    #print "stp interface : " + str(ps_interface_data)
+    #print "------------------------------------------------"
+    #print "vlan name : " + str(vtp_vlanname)
+    #print "------------------------------------------------"
+    #print "interface : " + str(iv_interface_data)
+    #print "trunk : " + str(trunk)
+    #print "vlan : " + str(vlan_interface)
+    #print "------------------------------------------------"
 
     #print stp_port #"1.3.6.1.2.1.17.2.15.1.1"
     #print stp_portstate #".1.3.6.1.2.1.17.2.15.1.3"
@@ -153,6 +153,7 @@ def switch(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community):
     ## interface , state
     interface_state = []
     interface_state = ps.portState(stp_port,stp_portstate,stp_portindex,ps_interface_data)
+    print "state : " + str(interface_state)
     for i in range(0,len(interface_state)):
         coll.update({"index":str(index)},{'$set':{"interface_state" + str(i):str(interface_state[i])}})
 
@@ -165,9 +166,9 @@ def switch(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community):
             newCDP.append(name_cdp[i] + "," + interface_cdp[i])
             coll.update({"index":str(index)},{'$set':{"cdp_interface"+str(i):str(newCDP[i])}}) 
 
-    print "done : " + str(done_list)
-    print "##############################"
-    print "Not donw : " + str(notdone_list)
+    #print "done : " + str(done_list)
+    #print "##############################"
+    #print "Not donw : " + str(notdone_list)
     a = name_data + detail_data + type + vlan_name + newData + interface_vlan + interface_state + newCDP
     #a = name_data + detail_data + type + vlan_name + newData + interface_vlan  + newCDP
     router.writeFile(a,filename)

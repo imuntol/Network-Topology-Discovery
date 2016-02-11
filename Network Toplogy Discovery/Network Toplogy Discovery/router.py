@@ -129,18 +129,18 @@ def router(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community):
 
     
 
-    print "name : " + str(name_data)
-    print "detail : " + str(detail_data)
-    print "------------------------------------------------"
-    print "ip : " + str(ip_data)
-    print "subnet : " + str(subnet_data)
-    print "index : " + str(index_data)
-    print "interface_data : " + str(interface_data)
-    print "------------------------------------------------"
+    #print "name : " + str(name_data)
+    #print "detail : " + str(detail_data)
+    #print "------------------------------------------------"
+    #print "ip : " + str(ip_data)
+    #print "subnet : " + str(subnet_data)
+    #print "index : " + str(index_data)
+    #print "interface_data : " + str(interface_data)
+    #print "------------------------------------------------"
     
-    print "name of neighbors : " + str(name_cdp)
-    print "interface of neighbors : " + str(interface_cdp)
-    print "ip of neighbors : " + str(ip_cdp)
+    #print "name of neighbors : " + str(name_cdp)
+    #print "interface of neighbors : " + str(interface_cdp)
+    #print "ip of neighbors : " + str(ip_cdp)
 
 
     ## add to database : index,router_name,detail
@@ -172,9 +172,9 @@ def router(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community):
         newCDP.append(name_cdp[i] + "," + interface_cdp[i])
         coll.update({"index":str(index)},{'$set':{"cdp_interface"+str(i):str(newCDP[i])}}) 
 
-    print "done : " + str(done_list)
-    print "##############################"
-    print "Not donw : " + str(notdone_list)
+    #print "done : " + str(done_list)
+    #print "##############################"
+    #print "Not donw : " + str(notdone_list)
     a = name_data + detail_data + type + newData + newCDP
     writeFile(a,filename)
     return done_list,notdone_list,index

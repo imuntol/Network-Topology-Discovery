@@ -9,9 +9,9 @@ import router as router
 #import check_device as check
 #import topology as topo
 
-community = "test"
-your_ip = "192.168.250.50"
-ip = "192.168.250.1"
+#community = "test"
+#your_ip = "192.168.250.50"
+#ip = "192.168.250.1"
 
 ### OID ###
 
