@@ -1,4 +1,4 @@
-import socket
+﻿import socket
 from socket import *
 import thread
 import os
@@ -9,7 +9,6 @@ from datetime import datetime
 import time
 import json
 import test_traffic as traffic
-import test_mongoDB_done as topology
 
 def connectDatabase(collectionsName):
     client = MongoClient()

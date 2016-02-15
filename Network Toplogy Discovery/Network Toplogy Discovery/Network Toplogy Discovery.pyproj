@@ -34,20 +34,26 @@
     <Compile Include="module1.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="setup.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="vlanname.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="portstate.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="test.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="test_switch.py">
+    <Compile Include="switch.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="topology.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="test_router.py" />
-    <Compile Include="socket.py">
+    <Compile Include="sockets.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="test_socket.py">

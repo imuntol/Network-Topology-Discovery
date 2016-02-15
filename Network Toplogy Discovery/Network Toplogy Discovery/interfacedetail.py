@@ -6,8 +6,8 @@ from datetime import datetime
 import time
 
 #community = "test"
-#your_ip = "192.168.1.1"
-#ip = "192.168.1.2"
+#your_ip = "192.168.200.44"
+#ip = "192.168.200.3"
 
 ### OID ###
 IPMIB_ipAdEntAddr = ".1.3.6.1.2.1.4.20.1.1"
@@ -54,7 +54,7 @@ def reArrange(data):
 
 def New_reArrange(data):
     for i in range(0,len(data)):
-        data[i] = data[i].split(".")[1];
+        data[i] = data[i].split("r.")[1];
         data[i] = data[i].split("=");
     numrows = len(data)    
     numcols = len(data[0])

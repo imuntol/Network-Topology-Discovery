@@ -3,9 +3,6 @@ import pymongo
 from pymongo import MongoClient
 import datetime
 from datetime import datetime
-#import json
-#import subprocess
-#import pprint
 import time
 
 #backup plsssssss version cont

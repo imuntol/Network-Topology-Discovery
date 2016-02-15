@@ -5,6 +5,7 @@ import datetime
 from datetime import datetime
 import time
 import topology as topo
+import test_traffic as traffic
 
 community = "test"
 your_ip = "192.168.250.44"
@@ -36,4 +37,10 @@ BRIDGEMIB_dot1dBasePortIfIndex = ".1.3.6.1.2.1.17.1.4.1.2" # port index
 #IFMIB_ifIndex
 #IFMIB_ifDescr
 
-topo.topology(your_ip,ip,community)
+indexTraffic = 0
+
+community,ipTraffic,collectionsName = topo.topology(your_ip,ip,community)
+#while (True):
+#    traffic.traffic(community,ipTraffic,collectionsName,indexTraffic)
+#    indexTraffic +=1 # +1 = 5 min
+#    time.sleep(5)

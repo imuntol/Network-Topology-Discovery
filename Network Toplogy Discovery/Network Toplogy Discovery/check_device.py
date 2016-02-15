@@ -4,10 +4,7 @@ from pymongo import MongoClient
 import datetime
 from datetime import datetime
 import time
-#import test_traffic as traffic
 import router as router
-#import test_switch as switch
-#import check_device as check
 import topology as topo
 
 SNMPv2MIB_sysName = ".1.3.6.1.2.1.1.5"

@@ -5,7 +5,7 @@ import datetime
 from datetime import datetime
 import time
 import router as router
-import test_switch as switch
+import switch as switch
 import check_device as check
 
 ### OID ###
@@ -42,6 +42,7 @@ def topology(your_ip,ip,community):
     newData = []
     ipTraffic = []
     index = 0
+    
     print "index : " + str(index)
     start_time = time.time()
     collectionsName = router.name()
@@ -72,7 +73,7 @@ def topology(your_ip,ip,community):
             index += 1
             ip = notdone_list.pop()
             done_list.append(ip)
-            ipTraffic.append(ip)
+            
             print "index : " + str(index)
             print "ip " + str(ip)
             print "done list : " + str(done_list)
@@ -85,8 +86,10 @@ def topology(your_ip,ip,community):
                 device = check.checkDevice(code)
                 print "type : " + str(device)
                 if device == "router":
+                    ipTraffic.append(ip)
                     done_list,notdone_list,index = router.router(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community)
                 elif device == "switch":
+                    ipTraffic.append(ip)
                     done_list,notdone_list,index = switch.switch(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community)
                 else:
                     print "dont know the type of device"
