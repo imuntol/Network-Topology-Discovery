@@ -64,8 +64,6 @@ while True:
         message = client.recv(Buff_size)
         if not message:
             break
-        #print message
-        #print coll.count()
         message2 = json.loads(message)
         if message2['cmd'] == "start":
             ip = message2['ip']
@@ -92,10 +90,10 @@ while True:
             client.send(data_topology_json)
 
         elif message2['cmd'] == "traffic":
-            collectionsName = collectionsName +"_"+ str(index)
-            traffic.traffic(community,ipTraffic,collectionsName)
-
-            coll = connectDatabase(collectionsName+"_traffic")
+            
+            #traffic.traffic(community,ipTraffic,collectionsName)
+            collectionsName = "Tue16Feb2016_162854_traffic_26"
+            coll = connectDatabase(collectionsName)
             #count = coll.count()
             a = []
             for x in coll.find():

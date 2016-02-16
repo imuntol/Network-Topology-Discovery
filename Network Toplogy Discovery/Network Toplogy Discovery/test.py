@@ -43,4 +43,4 @@ community,ipTraffic,collectionsName = topo.topology(your_ip,ip,community)
 #while (True):
 #    traffic.traffic(community,ipTraffic,collectionsName,indexTraffic)
 #    indexTraffic +=1 # +1 = 5 min
-#    time.sleep(5)
+#    time.sleep(2)

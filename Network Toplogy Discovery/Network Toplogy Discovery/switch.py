@@ -9,6 +9,7 @@ import portstate as ps
 import interfacevlan as iv
 import done_notdontlist as fl
 import vlanname as vn
+import cdps as cdps
 
 #community = "test"
 #your_ip = "192.168.100.50"
@@ -27,6 +28,7 @@ IFMIB_ifOnOctets = ".1.3.6.1.2.1.2.2.1.16"
 IFMIB_ifSpeed = ".1.3.6.1.2.1.2.2.1.5"
 
 IPMIB_ipNetToMediaNetAddress = ".1.3.6.1.2.1.4.22.1.3"
+CISCOCDPMIB_cdpInterfaceName = ".1.3.6.1.4.1.9.9.23.1.1.1.1.6"
 CISCOCDPMIB_cdpCacheDeviceId = ".1.3.6.1.4.1.9.9.23.1.2.1.1.6"
 CISCOCDPMIB_cdpCacheDevicePort = ".1.3.6.1.4.1.9.9.23.1.2.1.1.7"
 ###########
@@ -67,6 +69,13 @@ def switch(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community):
     index_data = router.reArrange(router.getData(router.command(community,ip,IPMIB_ipAdEntIfIndex)))
     interface_data = router.reArrange(router.getData(router.command(community,ip,IFMIB_ifDescr)))
 
+
+    ## new version
+    #name_data_cdps = reArrange(getData(command(community,ip,SNMPv2MIB_sysName)))
+    interface_data_cdps = cdps.New_reArrange_name(router.getData(router.command(community,ip,CISCOCDPMIB_cdpInterfaceName)))
+    name_cdp_cdps = cdps.New_reArrange_cdpname(router.getData(router.command(community,ip,CISCOCDPMIB_cdpCacheDeviceId)))
+    interface_cdps = cdps.New_reArrange_cdpinterface(router.getData(router.command(community,ip,CISCOCDPMIB_cdpCacheDevicePort)))
+    ##
 
     name_cdp = router.reArrange(router.getData(router.command(community,ip,CISCOCDPMIB_cdpCacheDeviceId)))
     interface_cdp = router.reArrange(router.getData(router.command(community,ip,CISCOCDPMIB_cdpCacheDevicePort)))
@@ -163,11 +172,17 @@ def switch(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community):
     for i in range(0,len(name_cdp)):
             newCDP.append(name_cdp[i] + "," + interface_cdp[i])
             coll.update({"index":str(index)},{'$set':{"cdp_interface"+str(i):str(newCDP[i])}}) 
+    
+    newCDPs = []
+    newCDPs = cdps.New_CDPs(name_data,interface_data_cdps,name_cdp_cdps,interface_cdps)
+    for i in range(0,len(newCDPs)):
+        coll.update({"index":str(index)},{'$set':{"new_cdp"+str(i):str(newCDPs[i])}}) 
+
 
     #print "done : " + str(done_list)
     #print "##############################"
     #print "Not donw : " + str(notdone_list)
-    a = name_data + detail_data + type + vlan_name + newData + interface_vlan + interface_state + newCDP
+    a = name_data + detail_data + type + vlan_name + newData + interface_vlan + interface_state + newCDP +newCDPs
     #a = name_data + detail_data + type + vlan_name + newData + interface_vlan  + newCDP
     router.writeFile(a,filename)
     return done_list,notdone_list,index

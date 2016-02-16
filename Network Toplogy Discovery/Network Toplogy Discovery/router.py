@@ -6,6 +6,7 @@ from datetime import datetime
 import time
 import interfacedetail as id
 import done_notdontlist as fl
+import cdps as cdps
 
 #community = "test"
 #your_ip = "192.168.1.1"
@@ -24,6 +25,7 @@ IFMIB_ifOnOctets = ".1.3.6.1.2.1.2.2.1.16"
 IFMIB_ifSpeed = ".1.3.6.1.2.1.2.2.1.5"
 
 IPMIB_ipNetToMediaNetAddress = ".1.3.6.1.2.1.4.22.1.3"
+CISCOCDPMIB_cdpInterfaceName = ".1.3.6.1.4.1.9.9.23.1.1.1.1.6"
 CISCOCDPMIB_cdpCacheDeviceId = ".1.3.6.1.4.1.9.9.23.1.2.1.1.6"
 CISCOCDPMIB_cdpCacheDevicePort = ".1.3.6.1.4.1.9.9.23.1.2.1.1.7"
 ###########
@@ -117,6 +119,12 @@ def router(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community):
     #interface_data = reArrange(getData(command(community,ip,IFMIB_ifDescr)))
     #traffic_data = reArrange(getData(command(community,ip,IFMIB_ifInOctets)))
 
+    ## new version
+    #name_data = reArrange(getData(command(community,ip,SNMPv2MIB_sysName)))
+    interface_data_cdps = cdps.New_reArrange_name(getData(command(community,ip,CISCOCDPMIB_cdpInterfaceName)))
+    name_cdp_cdps = cdps.New_reArrange_cdpname(getData(command(community,ip,CISCOCDPMIB_cdpCacheDeviceId)))
+    interface_cdps = cdps.New_reArrange_cdpinterface(getData(command(community,ip,CISCOCDPMIB_cdpCacheDevicePort)))
+    ##
     
 
     ##find cdp neighbors
@@ -172,9 +180,14 @@ def router(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community):
         newCDP.append(name_cdp[i] + "," + interface_cdp[i])
         coll.update({"index":str(index)},{'$set':{"cdp_interface"+str(i):str(newCDP[i])}}) 
 
+    newCDPs = []
+    newCDPs = cdps.New_CDPs(name_data,interface_data_cdps,name_cdp_cdps,interface_cdps)
+    for i in range(0,len(newCDPs)):
+        coll.update({"index":str(index)},{'$set':{"new_cdp"+str(i):str(newCDPs[i])}}) 
+
     #print "done : " + str(done_list)
     #print "##############################"
     #print "Not donw : " + str(notdone_list)
-    a = name_data + detail_data + type + newData + newCDP
+    a = name_data + detail_data + type + newData + newCDP + newCDPs
     writeFile(a,filename)
     return done_list,notdone_list,index

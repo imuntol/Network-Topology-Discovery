@@ -6,6 +6,7 @@ from datetime import datetime
 import time
 import router as router
 import portstate as ps
+import json
 
 community = "test"
 your_ip = "192.168.200.44"
@@ -17,6 +18,28 @@ BRIDGEMIB_dot1dStpPortState = ".1.3.6.1.2.1.17.2.15.1.3" #stp port state
 BRIDGEMIB_dot1dBasePortIfIndex = ".1.3.6.1.2.1.17.1.4.1.2" # port index
 CISCOCDPMIB_cdpCacheDevicePort = ".1.3.6.1.4.1.9.9.23.1.2.1.1.7"
 CISCOCDPMIB_cdpCacheDeviceId = ".1.3.6.1.4.1.9.9.23.1.2.1.1.6"
+
+
+def connectDatabase(collectionsName):
+    client = MongoClient()
+    database = str(collectionsName)
+    db = client['test']
+    collection = db[database]
+    return collection
+
+collectionsName = "Tue16Feb2016_233257"
+coll = connectDatabase(collectionsName)
+#count = coll.count()
+a = []
+for x in coll.find():
+    a.append(x)
+for d in a:
+    del d['_id']
+#print "wait 3 sec"
+#time.sleep(3)
+#print "sendind"
+data_topology_json = json.dumps(a)
+print data_topology_json
 
 #stp_port = ps.reArrange(ps.getData(ps.command(community,ip,BRIDGEMIB_dot1dStpPort)))
 #print stp_port
