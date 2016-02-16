@@ -40,7 +40,7 @@ BRIDGEMIB_dot1dBasePortIfIndex = ".1.3.6.1.2.1.17.1.4.1.2" # port index
 indexTraffic = 0
 
 community,ipTraffic,collectionsName = topo.topology(your_ip,ip,community)
-#while (True):
-#    traffic.traffic(community,ipTraffic,collectionsName,indexTraffic)
-#    indexTraffic +=1 # +1 = 5 min
-#    time.sleep(2)
+while (True):
+    traffic.traffic(community,ipTraffic,collectionsName,indexTraffic)
+    indexTraffic +=1 # +1 = 5 min
+    time.sleep(2)

@@ -27,7 +27,7 @@ def connectDatabase(collectionsName):
     collection = db[database]
     return collection
 
-collectionsName = "Tue16Feb2016_233257"
+collectionsName = "Wed17Feb2016_053526_traffic_0"
 coll = connectDatabase(collectionsName)
 #count = coll.count()
 a = []
