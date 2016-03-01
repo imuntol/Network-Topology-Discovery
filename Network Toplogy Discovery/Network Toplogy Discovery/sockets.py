@@ -51,70 +51,93 @@ indexTraffic = 0
 #sc = socket(AF_INET, SOCK_STREAM)
 #sc.connect((Client,Client_port))
 test_word = ["s"]
+#message = False
 
 while True:
     print "Waiting for Client to connnect"
     client,address = s.accept()
     print('connected from: ', address)
+    print('client from: ', client)
+    print('s from: ', not s)
+    
     #client.send(str.encode('Welcome to my Chat room!'))
     
     
     while True:
         #message = json.dumps({"cmd":"start","ip":"192.168.1.1","seed_ip":"192.168.1.2","com":"test"})
+        print "w8 cmd"
+        print "1"
         message = client.recv(Buff_size)
-        print message
-        if not message:
-            print "no message ----------------------------"
-            break
-        message2 = json.loads(message)
-        if message2['cmd'] == "start":
-            ip = message2['ip']
-            print ip
-            seed_ip = message2['seed_ip']
-            print seed_ip
-            community = message2['com']
-            print community
-            #community,ipTraffic,collectionsName = topo.topology(your_ip,ip,community)
-            #indexTraffic = traffic.traffic(community,ipTraffic,collectionsName,indexTraffic)
-            collectionsName = "Wed17Feb2016_053526"
-            coll = connectDatabase(collectionsName)
-            #count = coll.count()
-            a = []
-            for x in coll.find():
-                a.append(x)
-            for d in a:
-                del d['_id']
-            print "wait 5 sec"
-            time.sleep(5)
-            print "sendind"
-            data_topology_json = json.dumps(a)
-            print data_topology_json
-            client.send(data_topology_json)
-            break
+        
+        print "2"
+        if message == False:
+            print "3"
+            while not message:
+                print "4"
+                message = client.recv(Buff_size)
+                print "5"
+
+        else:
+            print "6"
+            print message
+        #print message
+        #if not message:
+        #    print "no message ----------------------------"
+        #    break
+        #else:
+            #if s == False:
+            #    break
+            message2 = json.loads(message)
+            print "7"
+            if message2['cmd'] == "start":
+                ip = message2['ip']
+                #print ip
+                seed_ip = message2['seed_ip']
+                #print seed_ip
+                community = message2['com']
+                #print community
+                #community,ipTraffic,collectionsName = topo.topology(ip,seed_ip,community)
+            
+                collectionsName = "Wed17Feb2016_053526"
+                coll = connectDatabase(collectionsName)
+                #count = coll.count()
+                a = []
+                for x in coll.find():
+                    a.append(x)
+                for d in a:
+                    del d['_id']
+                print "wait 1 sec"
+                time.sleep(1)
+                print "sendind"
+                data_topology_json = json.dumps(a)
+                print data_topology_json
+                client.send(data_topology_json)
+                #indexTraffic = traffic.traffic(community,ipTraffic,collectionsName,indexTraffic)   #Wed17Feb2016_053526
+            
             
 
-        elif message2['cmd'] == "traffic":
-            print "ttttttttttttttttttttttttttttt"
-            #indexTraffic = traffic.traffic(community,ipTraffic,collectionsName,indexTraffic)
-            #collectionsName_traffic = str(collectionsName) + "_traffic_" + str(indexTraffic)
-            collectionsName_traffic = "Wed17Feb2016_053526_traffic_0"
-            coll = connectDatabase(collectionsName_traffic)
-            #count = coll.count()
-            a = []
-            for x in coll.find():
-                a.append(x)
-            for d in a:
-                del d['_id']
-            traffic_topology_json = json.dumps(a)
-            print traffic_topology_json
-            client.send(traffic_topology_json)
-            print indexTraffic
-            break
-            #for x in coll.find():
-            #    print x
-        elif message2['cmd'] == "update_traffic":
-            indexTraffic = traffic.traffic(community,ipTraffic,collectionsName,indexTraffic)
-            print indexTraffic
-            break
-        else:
-            print message2      
+            elif message2['cmd'] == "traffic":
+                print "ttttttttttttttttttttttttttttt"
+                #indexTraffic = traffic.traffic(community,ipTraffic,collectionsName,indexTraffic)
+                #collectionsName_traffic = str(collectionsName) + "_traffic_" + str(indexTraffic)   Wed17Feb2016_053526_traffic_0
+                collectionsName_traffic = "Wed17Feb2016_053526_traffic_0"
+                coll = connectDatabase(collectionsName_traffic)
+                #count = coll.count()
+                a = []
+                for x in coll.find():
+                    a.append(x)
+                for d in a:
+                    del d['_id']
+                traffic_topology_json = json.dumps(a)
+                print traffic_topology_json
+                client.send(traffic_topology_json)
+                print indexTraffic
+            
+                #for x in coll.find():
+                #    print x
+            elif message2['cmd'] == "update_traffic":
+                indexTraffic = traffic.traffic(community,ipTraffic,collectionsName,indexTraffic)
+                print indexTraffic
+            
+            else:
+                print message2
