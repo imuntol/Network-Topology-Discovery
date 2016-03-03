@@ -13,7 +13,7 @@ ip = "192.168.250.1"
 ### OID ###
 
 IFMIB_ifDescr = ".1.3.6.1.2.1.2.2.1.2"
-BRIDGEMIB_dot1dStpPort = "1.3.6.1.2.1.17.2.15.1.1" #stp port
+BRIDGEMIB_dot1dStpPort = ".1.3.6.1.2.1.17.2.15.1.1" #stp port
 BRIDGEMIB_dot1dStpPortState = ".1.3.6.1.2.1.17.2.15.1.3" #stp port state
 BRIDGEMIB_dot1dBasePortIfIndex = ".1.3.6.1.2.1.17.1.4.1.2" # port index
 
