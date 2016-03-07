@@ -8,9 +8,10 @@ import topology as topo
 import test_traffic as traffic
 
 community = "test"
-your_ip = "192.168.250.44"
-ip = "192.168.250.2"
-
+your_ip = "192.168.0.2"
+ip = "192.168.0.150"
+username = "admin"
+password = "admin"
 ### OID ###
 SNMPv2MIB_sysName = ".1.3.6.1.2.1.1.5"
 SNMPv2MIB_sysDescr = ".1.3.6.1.2.1.1.1"
@@ -39,8 +40,9 @@ BRIDGEMIB_dot1dBasePortIfIndex = ".1.3.6.1.2.1.17.1.4.1.2" # port index
 
 indexTraffic = 0
 
-community,ipTraffic,collectionsName = topo.topology(your_ip,ip,community)
+community,ipTraffic,collectionsName = topo.topology(your_ip,ip,community,username,password)
 while (True):
     traffic.traffic(community,ipTraffic,collectionsName,indexTraffic)
     indexTraffic +=1 # +1 = 5 min
     time.sleep(2)
+    break

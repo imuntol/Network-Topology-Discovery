@@ -1,0 +1,10 @@
+index : 0,Vlan1,0.0,0.0%
+index : 0,Vlan1,0.0,0.0%
+index : 0,Vlan3,0.01,0.0%
+index : 0,Vlan3,0.01,0.0%
+index : 0,FastEthernet0/1,0.0,0.0%
+index : 0,FastEthernet0/1,0.0,0.0%
+index : 0,FastEthernet0/5,0.0,0.0%
+index : 0,FastEthernet0/5,0.0,0.0%
+index : 0,FastEthernet0/23,0.02,0.02%
+index : 0,FastEthernet0/23,0.0,0.0%

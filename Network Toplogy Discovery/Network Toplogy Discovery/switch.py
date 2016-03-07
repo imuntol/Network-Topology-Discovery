@@ -10,10 +10,15 @@ import interfacevlan as iv
 import done_notdontlist as fl
 import vlanname as vn
 import cdps as cdps
+import telnet as t
 
 #community = "test"
 #your_ip = "192.168.100.50"
 #ip = "192.168.100.1"
+#host = "192.168.0.150" # your router ip
+#username = "admin" # the username
+#password = "admin"
+
 
 ### OID ###
 SNMPv2MIB_sysName = ".1.3.6.1.2.1.1.5"
@@ -60,7 +65,7 @@ CISCOVTPMIB_vlanTrunkPortDynamicStatus = ".1.3.6.1.4.1.9.9.46.1.6.1.1.14" # chec
 #print vlan_interface
 #print "------------------------------------------------"
 
-def switch(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community):
+def switch(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community,username,password):
     
     name_data = router.reArrange(router.getData(router.command(community,ip,SNMPv2MIB_sysName)))
     detail_data = router.detail(router.getData(router.command(community,ip,SNMPv2MIB_sysDescr)))
@@ -152,17 +157,34 @@ def switch(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community):
 
     ## interface , vlan
     interface_vlan = []
+    interface_vlan2 = []
     interface_vlan = iv.interfaceVlan(iv_interface_data,trunk,vlan_interface)
     for i in range(0,len(interface_vlan)):
+        #print interface_vlan[i]
+        interface_vlan2.append(interface_vlan[i])
         coll.update({"index":str(index)},{'$set':{"interface_vlan" + str(i):str(interface_vlan[i])}})
+    #interface_vlan2 = []
+    #interface_vlan2 = interface_vlan
+ 
     
 
-    ## interface , state
+    ### interface , state vlan1
+    #interface_state = []
+    #interface_state = ps.portState(stp_port,stp_portstate,stp_portindex,ps_interface_data)
+    #print "state : " + str(interface_state)
+    #for i in range(0,len(interface_state)):
+    #    coll.update({"index":str(index)},{'$set':{"interface_state" + str(i):str(interface_state[i])}})
+
+    ## interface , state vlan 2 up
     interface_state = []
-    interface_state = ps.portState(stp_port,stp_portstate,stp_portindex,ps_interface_data)
-    print "state : " + str(interface_state)
-    for i in range(0,len(interface_state)):
-        coll.update({"index":str(index)},{'$set':{"interface_state" + str(i):str(interface_state[i])}})
+    interface_state_vlan = []
+    interface_state = t.telnet_portstate(ip,username,password)
+
+    interface_state_vlan = t.port_state(interface_vlan,interface_state)
+    for i in range(0,len(interface_state_vlan)):
+        coll.update({"index":str(index)},{'$set':{"interface_state" + str(i):str(interface_state_vlan[i])}})
+
+
 
     ## donelist notdonelist
     done_list,notdone_list = fl.findlist(ip_data,ip_cdp,done_list,notdone_list)
@@ -182,7 +204,7 @@ def switch(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community):
     #print "done : " + str(done_list)
     #print "##############################"
     #print "Not donw : " + str(notdone_list)
-    a = name_data + detail_data + type + vlan_name + newData + interface_vlan + interface_state + newCDP +newCDPs
+    a = name_data + detail_data + type + vlan_name + newData + interface_vlan2 + interface_state_vlan + newCDP +newCDPs
     #a = name_data + detail_data + type + vlan_name + newData + interface_vlan  + newCDP
     router.writeFile(a,filename)
     return done_list,notdone_list,index

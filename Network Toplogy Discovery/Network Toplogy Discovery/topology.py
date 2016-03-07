@@ -34,7 +34,7 @@ BRIDGEMIB_dot1dBasePortIfIndex = ".1.3.6.1.2.1.17.1.4.1.2" # port index
 #IFMIB_ifIndex
 #IFMIB_ifDescr
 
-def topology(your_ip,ip,community):
+def topology(your_ip,ip,community,username,password):
     #print "your ip : " + str(your_ip) +" ip device : " + str(ip) + " community : " + str(community)
     
     done_list = []
@@ -65,7 +65,7 @@ def topology(your_ip,ip,community):
         if device == "router":
             done_list,notdone_list,index = router.router(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community)
         elif device == "switch":
-            done_list,notdone_list,index = switch.switch(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community)
+            done_list,notdone_list,index = switch.switch(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community,username,password)
         else:
             print "dont know the type of device"
     
@@ -90,7 +90,7 @@ def topology(your_ip,ip,community):
                     done_list,notdone_list,index = router.router(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community)
                 elif device == "switch":
                     ipTraffic.append(ip)
-                    done_list,notdone_list,index = switch.switch(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community)
+                    done_list,notdone_list,index = switch.switch(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community,username,password)
                 else:
                     print "dont know the type of device"
             print index
