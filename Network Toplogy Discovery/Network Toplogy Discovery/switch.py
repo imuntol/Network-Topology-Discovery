@@ -11,6 +11,7 @@ import done_notdontlist as fl
 import vlanname as vn
 import cdps as cdps
 import telnet as t
+import ssh as s
 
 #community = "test"
 #your_ip = "192.168.100.50"
@@ -178,7 +179,7 @@ def switch(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community,use
     ## interface , state vlan 2 up
     interface_state = []
     interface_state_vlan = []
-    interface_state = t.telnet_portstate(ip,username,password)
+    interface_state = s.ssh_portstate(ip,username,password)
 
     interface_state_vlan = t.port_state(interface_vlan,interface_state)
     for i in range(0,len(interface_state_vlan)):

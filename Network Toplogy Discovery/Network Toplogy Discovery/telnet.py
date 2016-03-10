@@ -42,7 +42,7 @@ def telnet_portstate(host,username,password):
     #print data[0][0]
     for j in range(0,len(data)):
         data[j][1] = data[j][1].split("is ")[1];
-        data[j][1] = data[j][1].split(" ")[0];
+        #data[j][1] = data[j][1].split(" ")[0];
     #print data
     return data
 

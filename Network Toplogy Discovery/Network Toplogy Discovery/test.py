@@ -8,8 +8,8 @@ import topology as topo
 import test_traffic as traffic
 
 community = "test"
-your_ip = "192.168.0.2"
-ip = "192.168.0.150"
+your_ip = "192.168.1.22"
+ip = "192.168.1.3"
 username = "admin"
 password = "admin"
 ### OID ###
@@ -41,8 +41,8 @@ BRIDGEMIB_dot1dBasePortIfIndex = ".1.3.6.1.2.1.17.1.4.1.2" # port index
 indexTraffic = 0
 
 community,ipTraffic,collectionsName = topo.topology(your_ip,ip,community,username,password)
-while (True):
-    traffic.traffic(community,ipTraffic,collectionsName,indexTraffic)
-    indexTraffic +=1 # +1 = 5 min
-    time.sleep(2)
-    break
+#while (True):
+#    traffic.traffic(community,ipTraffic,collectionsName,indexTraffic)
+#    indexTraffic +=1 # +1 = 5 min
+#    time.sleep(2)
+#    break
