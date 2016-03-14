@@ -54,7 +54,7 @@ def topology(your_ip,ip,community,username,password):
 
     print "done list : " + str(done_list)
     print "not done list : " + str(notdone_list)
-
+    print "ip : " +str(ip)
     code = check.findCode(community,ip)
     if code == []:
         print "skip this ip"

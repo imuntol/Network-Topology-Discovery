@@ -80,13 +80,6 @@ while True:
         else:
             print "6"
             print message
-        #print message
-        #if not message:
-        #    print "no message ----------------------------"
-        #    break
-        #else:
-            #if s == False:
-            #    break
             message2 = json.loads(message)
             print "7"
             if message2['cmd'] == "start":
@@ -96,7 +89,10 @@ while True:
                 #print seed_ip
                 community = message2['com']
                 #print community
-                #community,ipTraffic,collectionsName = topo.topology(ip,seed_ip,community)
+                username = message2['username']
+                password = message2['compassword']
+
+                #community,ipTraffic,collectionsName = topo.topology(ip,seed_ip,community,username,password)
             
                 collectionsName = "Wed17Feb2016_053526"
                 coll = connectDatabase(collectionsName)
@@ -114,13 +110,17 @@ while True:
                 client.send(data_topology_json)
                 #indexTraffic = traffic.traffic(community,ipTraffic,collectionsName,indexTraffic)   #Wed17Feb2016_053526
             
-            
-
             elif message2['cmd'] == "traffic":
                 print "ttttttttttttttttttttttttttttt"
                 #indexTraffic = traffic.traffic(community,ipTraffic,collectionsName,indexTraffic)
-                #collectionsName_traffic = str(collectionsName) + "_traffic_" + str(indexTraffic)   Wed17Feb2016_053526_traffic_0
-                collectionsName_traffic = "Wed17Feb2016_053526_traffic_0"
+                ##collectionsName_traffic = str(collectionsName) + "_traffic_" + str(indexTraffic)   Wed17Feb2016_053526_traffic_0
+
+                #collectionsNameTopo = collectionsName
+                #collectionsNameTraff = collectionsName+"_traffic_"+indexTraffic
+                #aaa = an.anaysit(collectionsNameTopo,collectionsNameTraff)
+                #collectionsName_traffic_new = collectionsName+"_traffic_new"+indexTraffic
+
+                collectionsName_traffic = "Wed17Feb2016_053526_traffic_0" #use collectionsName_traffic_new instead
                 coll = connectDatabase(collectionsName_traffic)
                 #count = coll.count()
                 a = []
@@ -129,15 +129,24 @@ while True:
                 for d in a:
                     del d['_id']
                 traffic_topology_json = json.dumps(a)
-                print traffic_topology_json
+                #print traffic_topology_json
                 client.send(traffic_topology_json)
-                print indexTraffic
+                #print indexTraffic
             
                 #for x in coll.find():
                 #    print x
             elif message2['cmd'] == "update_traffic":
-                indexTraffic = traffic.traffic(community,ipTraffic,collectionsName,indexTraffic)
-                print indexTraffic
+                collectionsName_traffic = str(collectionsName) + "_traffic_" + str(indexTraffic)  # Wed17Feb2016_053526_traffic_0
+                coll = connectDatabase(collectionsName_traffic)
+                #count = coll.count()
+                a = []
+                for x in coll.find():
+                    a.append(x)
+                for d in a:
+                    del d['_id']
+                traffic_topology_json = json.dumps(a)
+                #print traffic_topology_json
+                client.send(traffic_topology_json)
             
             else:
                 print message2

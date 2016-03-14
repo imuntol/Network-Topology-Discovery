@@ -88,10 +88,10 @@ def switch(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community,use
     ip_cdp = router.reArrange(router.getData(router.command(community,ip,IPMIB_ipNetToMediaNetAddress)))
 
     ### forwarding blocking
-    stp_port = ps.reArrange(ps.getData(ps.command(community,ip,BRIDGEMIB_dot1dStpPort)))
-    stp_portstate = ps.New_reArrange(ps.getData(ps.command(community,ip,BRIDGEMIB_dot1dStpPortState)))
-    stp_portindex = ps.New_reArrange(ps.getData(ps.command(community,ip,BRIDGEMIB_dot1dBasePortIfIndex)))
-    ps_interface_data = ps.New_reArrange(router.getData(router.command(community,ip,IFMIB_ifDescr)))
+    #stp_port = ps.reArrange(ps.getData(ps.command(community,ip,BRIDGEMIB_dot1dStpPort)))
+    #stp_portstate = ps.New_reArrange(ps.getData(ps.command(community,ip,BRIDGEMIB_dot1dStpPortState)))
+    #stp_portindex = ps.New_reArrange(ps.getData(ps.command(community,ip,BRIDGEMIB_dot1dBasePortIfIndex)))
+    #ps_interface_data = ps.New_reArrange(router.getData(router.command(community,ip,IFMIB_ifDescr)))
     ###
     ### vlan vlan_name
     vtp_vlanname = vn.New_reArrange(router.getData(router.command(community,ip,CISCOVTPMIB_vtpVlanName)))
@@ -177,11 +177,10 @@ def switch(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community,use
     #    coll.update({"index":str(index)},{'$set':{"interface_state" + str(i):str(interface_state[i])}})
 
     ## interface , state vlan 2 up
-    interface_state = []
+    #interface_state = []
     interface_state_vlan = []
-    interface_state = s.ssh_portstate(ip,username,password)
-
-    interface_state_vlan = t.port_state(interface_vlan,interface_state)
+    interface_state_vlan = s.ssh_portstate(ip,username,password)
+    #interface_state_vlan = t.port_state(interface_vlan,interface_state)
     for i in range(0,len(interface_state_vlan)):
         coll.update({"index":str(index)},{'$set':{"interface_state" + str(i):str(interface_state_vlan[i])}})
 
@@ -193,8 +192,8 @@ def switch(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community,use
     ## update cdp_interface
     newCDP = []
     for i in range(0,len(name_cdp)):
-            newCDP.append(name_cdp[i] + "," + interface_cdp[i])
-            coll.update({"index":str(index)},{'$set':{"cdp_interface"+str(i):str(newCDP[i])}}) 
+        newCDP.append(name_cdp[i] + "," + interface_cdp[i])
+        coll.update({"index":str(index)},{'$set':{"cdp_interface"+str(i):str(newCDP[i])}}) 
     
     newCDPs = []
     newCDPs = cdps.New_CDPs(name_data,interface_data_cdps,name_cdp_cdps,interface_cdps)

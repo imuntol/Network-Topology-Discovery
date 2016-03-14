@@ -6,10 +6,11 @@ from datetime import datetime
 import time
 import topology as topo
 import test_traffic as traffic
+import anaysitData as an
 
 community = "test"
-your_ip = "192.168.1.22"
-ip = "192.168.1.3"
+your_ip = "192.168.1.44"
+ip = "192.168.1.1"
 username = "admin"
 password = "admin"
 ### OID ###
@@ -41,8 +42,13 @@ BRIDGEMIB_dot1dBasePortIfIndex = ".1.3.6.1.2.1.17.1.4.1.2" # port index
 indexTraffic = 0
 
 community,ipTraffic,collectionsName = topo.topology(your_ip,ip,community,username,password)
-#while (True):
-#    traffic.traffic(community,ipTraffic,collectionsName,indexTraffic)
-#    indexTraffic +=1 # +1 = 5 min
-#    time.sleep(2)
-#    break
+while (True):
+    traffic.traffic(community,ipTraffic,collectionsName,indexTraffic)
+    
+    time.sleep(2)
+    collectionsNameTopo = collectionsName
+    collectionsNameTraff = collectionsName+"_traffic_"+indexTraffic
+    aaa = an.anaysit(collectionsNameTopo,collectionsNameTraff)
+    collectionsName_traffic_new = collectionsName+"_traffic_new"+indexTraffic
+    indexTraffic +=1 # +1 = 5 min
+    break
