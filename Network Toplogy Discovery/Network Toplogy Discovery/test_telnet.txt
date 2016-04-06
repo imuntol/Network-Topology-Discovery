@@ -1,6 +1,0 @@
- 
-sw1>sh run
-        ^
-% Invalid input detected at '^' marker.
-
-sw1>exit

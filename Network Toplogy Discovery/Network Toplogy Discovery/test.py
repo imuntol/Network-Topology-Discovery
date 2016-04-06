@@ -9,8 +9,8 @@ import test_traffic as traffic
 import anaysitData as an
 
 community = "test"
-your_ip = "192.168.1.44"
-ip = "192.168.1.1"
+your_ip = "192.168.1.1"
+ip = "192.168.1.2"
 username = "admin"
 password = "admin"
 ### OID ###
@@ -47,8 +47,8 @@ while (True):
     
     time.sleep(2)
     collectionsNameTopo = collectionsName
-    collectionsNameTraff = collectionsName+"_traffic_"+indexTraffic
+    collectionsNameTraff = str(collectionsName)+"_traffic_"+str(indexTraffic)
     aaa = an.anaysit(collectionsNameTopo,collectionsNameTraff)
-    collectionsName_traffic_new = collectionsName+"_traffic_new"+indexTraffic
+    collectionsName_traffic_new = str(collectionsName)+"_traffic_new"+str(indexTraffic)
     indexTraffic +=1 # +1 = 5 min
     break
