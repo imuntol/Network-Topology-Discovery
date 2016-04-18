@@ -49,7 +49,7 @@ def connectDatabase(collectionsName):
 a = []
 #Client = "192.168.1.22"
 #Client_port = 50001
-Host = "10.20.22.90"
+Host = "10.20.23.18"
 Port = 50000
 Buff_size = 1024
 
@@ -85,7 +85,7 @@ while True:
         if message[0] != '{': #and message[0] != '['
             continue
         message = json.loads(message)
-        print "2 " + str(message)
+        print "2:" + str(message)
         if message['cmd'] == "start":
             ip = message['ip']
             #print ip
@@ -98,7 +98,8 @@ while True:
 
             #community,ipTraffic,collectionsName = topo.topology(ip,seed_ip,community,username,password)
             
-            collectionsName = "Sun13Mar2016_163108"
+            #collectionsName = "Sun13Mar2016_163108"
+            collectionsName = "Mon18Apr2016_225902"
             coll = connectDatabase(collectionsName)
             #count = coll.count()
             a = []
@@ -157,6 +158,14 @@ while True:
             traffic_topology_json = json.dumps(a)
             #print traffic_topology_json
             client.send(traffic_topology_json)
-            
+
+        elif message['cmd'] == "save":
+            location = []
+            for temp in message['location']:
+                location.append(temp)
+            collectionsName = "Mon18Apr2016_225902"
+            coll = connectDatabase(collectionsName)
+            for i in range(0,len(location)):
+                coll.update({"index":str(i)},{'$set':{"location":location[i]}})
         else:
             print message

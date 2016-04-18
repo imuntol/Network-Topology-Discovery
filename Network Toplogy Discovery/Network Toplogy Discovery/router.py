@@ -185,6 +185,14 @@ def router(ip,done_list,notdone_list,filename,index,coll,ipTraffic,community):
     for i in range(0,len(newCDPs)):
         coll.update({"index":str(index)},{'$set':{"new_cdp"+str(i):str(newCDPs[i])}}) 
 
+    #add X , Y for position
+    #x = []
+    #y = []
+    #x.append("none")
+    #y.append("none")
+    coll.update({"index":str(index)},{'$set':{"location":"none"}})
+    #coll.update({"index":str(index)},{'$set':{"y":"none"}})
+
     #print "done : " + str(done_list)
     #print "##############################"
     #print "Not donw : " + str(notdone_list)
