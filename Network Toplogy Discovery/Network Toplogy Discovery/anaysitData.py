@@ -48,14 +48,14 @@ def writeFile(data,filename):
         thefile.write("%s\n" % item)
     thefile.close()
 
-def anaysit(collectionsNameTopo,collectionsNameTraff):
+def anaysit(collectionsNameTopo,collectionsNameTraff,indexTraffic):
     #collectionsNameTopo = "Sun13Mar2016_163108"
     #collectionsNameTraff = "Sun13Mar2016_163108_traffic_0"
     collectionTop = connectDatabase(collectionsNameTopo)
     collectionTraff = connectDatabase(collectionsNameTraff)
     dataTopo = connectCollections(collectionsNameTopo,collectionTop)
     dataTraffic = connectCollections(collectionsNameTraff,collectionTraff)
-    name = str(collectionsNameTraff)+"_new"
+    name = str(collectionsNameTraff)+str(indexTraffic)+"_new"
 
     index_data = []
     cdp_data = []
@@ -159,7 +159,7 @@ def anaysit(collectionsNameTopo,collectionsNameTraff):
         test = []
     #print traffic_cut
     writeFile(traffic_cut,filename)
-    return traffic_cut
+    return traffic_cut,name
 
 
 

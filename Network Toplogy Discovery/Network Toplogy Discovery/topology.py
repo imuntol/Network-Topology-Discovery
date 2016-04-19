@@ -45,10 +45,17 @@ def topology(your_ip,ip,community,username,password):
     
     print "index : " + str(index)
     start_time = time.time()
+    ## db topology
     collectionsName = router.name()
     coll = router.connectDatabase(collectionsName)
     filename = router.makeFile(collectionsName)
+    ##
 
+    ## db config
+    config_name = collectionsName+"_config"
+    coll_config = connectDatabase(config_name)
+    coll_config.insert_one({"name":"none","date":collectionsName,"index":"0","traffic_index":"none"})
+    ##
     done_list.append(your_ip)
     ipTraffic.append(ip)
 
@@ -95,4 +102,4 @@ def topology(your_ip,ip,community,username,password):
                     print "dont know the type of device"
             print index
     print("--- %s seconds ---" % (time.time() - start_time))
-    return community,ipTraffic,collectionsName
+    return community,ipTraffic,collectionsName,config_name

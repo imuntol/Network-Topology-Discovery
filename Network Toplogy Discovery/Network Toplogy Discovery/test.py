@@ -41,7 +41,7 @@ BRIDGEMIB_dot1dBasePortIfIndex = ".1.3.6.1.2.1.17.1.4.1.2" # port index
 
 indexTraffic = 0
 
-community,ipTraffic,collectionsName = topo.topology(your_ip,ip,community,username,password)
+community,ipTraffic,collectionsName,config_name = topo.topology(your_ip,ip,community,username,password)
 while (True):
     traffic.traffic(community,ipTraffic,collectionsName,indexTraffic)
     
