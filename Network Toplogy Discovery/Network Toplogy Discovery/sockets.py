@@ -57,13 +57,20 @@ def connectDatabase(collectionsName):
     return collection
 
 def update_traffic(community,ipTraffic,collectionsName,indexTraffic,config_name):
-    indexTraffic = traffic.traffic(community,ipTraffic,collectionsName,indexTraffic)   #Wed17Feb2016_053526
+    indexTraffic,traffic_datetime = traffic.traffic(community,ipTraffic,collectionsName,indexTraffic)   #Wed17Feb2016_053526
     collectionsNameTopo = collectionsName
     collectionsNameTraff = collectionsName+"_traffic_"+indexTraffic
     aaa,collectionsName_traffic_new = an.anaysit(collectionsNameTopo,collectionsNameTraff,indexTraffic)
-    #config_name
+    ##topo_config_name
     coll_config = connectDatabase(config_name)
     coll_config.update({"index":"0"},{'$set':{"traffic_index":str(indexTraffic)}})
+    ##
+    ##traffic_config_name
+    config_traffic_name = "timeline_"+collectionsName_traffic_new
+    coll_config_traffic = connectDatabase(config_traffic_name)
+    coll_config_traffic.insert_one({"index":"0"})
+    coll_config_traffic.update({"index":"0"},{'$set':{"name":collectionsName_traffic_new,"date_time":traffic_datetime}})
+    ##
 
     return indexTraffic,collectionsName_traffic_new
 
@@ -81,7 +88,7 @@ s.bind((Host,Port))
 s.listen(1)
 
 
-indexTraffic = 0
+
 
 while True:
     print "Waiting for Client to connnect"
@@ -111,7 +118,7 @@ while True:
             community = message['com']
             username = message['username']
             password = message['compassword']
-
+            indexTraffic = 0
             community,ipTraffic,collectionsName,config_name = topo.topology(ip,seed_ip,community,username,password)
             
             #collectionsName = "Sun13Mar2016_163108"
@@ -129,30 +136,22 @@ while True:
             a.append(data_topology_json)
             name = makeFile("data")
             writeFile(a,name)
-            ## traffic
-            indexTraffic = traffic.traffic(community,ipTraffic,collectionsName,indexTraffic)   #Wed17Feb2016_053526
-           
-            collectionsNameTopo = collectionsName
-            collectionsNameTraff = collectionsName+"_traffic_"+indexTraffic
-            aaa,collectionsName_traffic_new = an.anaysit(collectionsNameTopo,collectionsNameTraff,indexTraffic)
-            #config_name
-            coll_config = connectDatabase(config_name)
-            coll_config.update({"index":"0"},{'$set':{"traffic_index":str(indexTraffic)}})
 
-            #collectionsName_traffic_new = collectionsName +"_traffic_"  + indexTraffic + "_new"
-            ##
+
+            indexTraffic,collectionsName_traffic_new = update_traffic(community,ipTraffic,collectionsName,indexTraffic,config_name)
+            ### traffic
+            #indexTraffic = traffic.traffic(community,ipTraffic,collectionsName,indexTraffic)   #Wed17Feb2016_053526
+           
+            #collectionsNameTopo = collectionsName
+            #collectionsNameTraff = collectionsName+"_traffic_"+indexTraffic
+            #aaa,collectionsName_traffic_new = an.anaysit(collectionsNameTopo,collectionsNameTraff,indexTraffic)
+            ##config_name
+            #coll_config = connectDatabase(config_name)
+            #coll_config.update({"index":"0"},{'$set':{"traffic_index":str(indexTraffic)}})
+            ###
             client.send("done")
                  
         elif message['cmd'] == "traffic":
-            #indexTraffic = traffic.traffic(community,ipTraffic,collectionsName,indexTraffic)
-            
-            #collectionsNameTopo = collectionsName
-            #collectionsNameTraff = collectionsName+"_traffic_"+indexTraffic
-            #aaa = an.anaysit(collectionsNameTopo,collectionsNameTraff)
-            #collectionsName_traffic_new = collectionsName+"_traffic_new"+indexTraffic
-
-                     #collectionsName_traffic = "Wed17Feb2016_053526_traffic_0" #use collectionsName_traffic_new instead
-            #collectionsName_traffic = collectionsName + "_traffic_" + indexTraffic + "_new"  #Wed17Feb2016_053526_traffic_0
             coll = connectDatabase(collectionsName_traffic_new)
             a = []
             for x in coll.find():
@@ -175,28 +174,6 @@ while True:
             except:
                print "Error: unable to start thread"
 
-            #update_traffic(community,ipTraffic,collectionsName,indexTraffic)
-
-            ## traffic
-            #indexTraffic = traffic.traffic(community,ipTraffic,collectionsName,indexTraffic)   #Wed17Feb2016_053526
-            #collectionsNameTopo = collectionsName
-            #collectionsNameTraff = collectionsName+"_traffic_"+indexTraffic
-            #aaa,collectionsName_traffic_new = an.anaysit(collectionsNameTopo,collectionsNameTraff,indexTraffic)
-            ##
-
-            #coll = connectDatabase(collectionsName_traffic_new)
-            #a = []
-            #for x in coll.find():
-            #    a.append(x)
-            #for d in a:
-            #    del d['_id']
-            #traffic_topology_json = json.dumps(a)
-            #a = []
-            #a.append(data_topology_json)
-            #name = makeFile("traffic")
-            #writeFile(a,name)
-            #client.send("done")
-
         elif message['cmd'] == "save":
             location = []
             for temp in message['location']:
@@ -209,8 +186,7 @@ while True:
             #config_name
             coll_config = connectDatabase(config_name)
             coll_config.update({"index":"0"},{'$set':{"name":message['name']}})
-            #coll_config.update({"index":"0"},{'$set':{"traffic_index":str(indexTraffic)}})
-
+         
         elif message['cmd'] == "load":
             client = MongoClient('localhost',27017)
             db = client['test']
@@ -231,7 +207,7 @@ while True:
             c=[]
             for i in range(0,len(a)):
                 c.append(str(a[i])+","+str(b[i]))
-            print c
+            #print c
 
             name = makeFile_txt("list_save")
             writeFile(c,name)
@@ -259,6 +235,41 @@ while True:
             name = makeFile("data")
             writeFile(a,name)
             client.send("done")
+
+        elif message['cmd'] == "timeline":
+            client = MongoClient('localhost',27017)
+            db = client['test']
+            data = db.collection_names()
+            temp = []
+            for i in data:
+                if "timeline_"+collectionsName in i:
+                    #print i
+                    temp.append(i)
+            a=[]
+            for i in range(0,len(temp)):
+                 #print temp[i]
+                 a.append(str(temp[i]))
+            b=[]
+            for i in a:
+                coll_timeline = connectDatabase(i)
+                b.append(coll_timeline.find_one('name')+","+coll_timeline.find_one('date_time'))
+            name = makeFile_txt("timeline")
+            writeFile(b,name)
+            client.send("done")
+
+        elif message['cmd'] == "stimeline":
+            db_timeline = message['db_timeline']
+            coll_timeline = connectDatabase(db_timeline)
+            a = []
+            for x in coll.find():
+                a.append(x)
+            for d in a:
+                del d['_id']
+            traffic_topology_json = json.dumps(a)
+            a = []
+            a.append(data_topology_json)
+            name = makeFile("traffic")
+            writeFile(a,name)
 
         else:
             print message

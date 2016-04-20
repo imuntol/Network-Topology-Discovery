@@ -125,7 +125,7 @@ def ttttt(community,ipTraffic,collectionsName,indexTraffic):
 def traffic(community,ipTraffic,collectionsName,indexTraffic):
     index = 0
     
-    coll = router.connectDatabase(collectionsName + "_traffic" + "_" + str(indexTraffic))
+    coll = router.connectDatabase(collectionsName + "_traffic_" + str(indexTraffic))
     filename = "traffic_" + str(indexTraffic) + "_" + router.makeFile(collectionsName)
     newTraffic = []
     for ip in ipTraffic:
@@ -134,6 +134,10 @@ def traffic(community,ipTraffic,collectionsName,indexTraffic):
         check_Interface = checkInterface(community,ip)
         #packet_Size = packetSize(community,ip)
         r,c = getRowCol(check_Interface)
+        ## data_time for traffic_config
+        date_time = datetime.now()
+        date_time = date_time.strftime('%a%d%b%Y_%H%M%S')
+        ##
         start_time = time.time()
         trafficIn_1 = traffIn(community,ip)
         trafficOut_1 = traffOut(community,ip)
@@ -141,8 +145,10 @@ def traffic(community,ipTraffic,collectionsName,indexTraffic):
         trafficIn_2 = traffIn(community,ip)
         trafficOut_2 = traffOut(community,ip)
         delta_time = time.time() - start_time
+        ## make information
         form = {"index":str(index)}
         coll.insert_one(form)
+        ##
         temp = 0
         
         print "index : " + str(index)
@@ -193,7 +199,7 @@ def traffic(community,ipTraffic,collectionsName,indexTraffic):
         #print "Avg : " +str(avg)
     indexTraffic +=1 # +1 = 5 min
     router.writeFile(newTraffic,filename)
-    return indexTraffic
+    return indexTraffic,date_time
 
 
 #avg = 0

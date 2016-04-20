@@ -55,7 +55,11 @@ def anaysit(collectionsNameTopo,collectionsNameTraff,indexTraffic):
     collectionTraff = connectDatabase(collectionsNameTraff)
     dataTopo = connectCollections(collectionsNameTopo,collectionTop)
     dataTraffic = connectCollections(collectionsNameTraff,collectionTraff)
-    name = str(collectionsNameTraff)+str(indexTraffic)+"_new"
+    name = str(collectionsNameTraff)+"_new"
+    #name2 = str(collectionsNameTraff)+str(indexTraffic)+"_new"
+
+    print dataTopo
+    print dataTraffic
 
     index_data = []
     cdp_data = []

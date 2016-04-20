@@ -198,6 +198,33 @@ while True:
             client.send("done")
             print "sended"
 
+        elif message['cmd'] == "timeline":
+            time.sleep(2)
+            print "w8 2 sec"
+            client.send("done")
+            print "sended"
+
+        elif message['cmd'] == "stimeline":
+            print message['db_timeline']
+            time.sleep(2)
+            print "w8 2 sec"
+            client.send("done")
+            print "sended"
+
+        elif message['cmd'] == "save":
+            location = []
+            for temp in message['location']:
+                location.append(temp)
+            print location
+            ##collectionsName = "Mon18Apr2016_225902"
+            #coll = connectDatabase(collectionsName)
+            #for i in range(0,len(location)):
+            #    coll.update({"index":str(i)},{'$set':{"location":location[i]}})
+            print message['topoName']
+            ##config_name
+            #coll_config = connectDatabase(config_name)
+            #coll_config.update({"index":"0"},{'$set':{"name":message['name']}})
+
         else:
             print message
 

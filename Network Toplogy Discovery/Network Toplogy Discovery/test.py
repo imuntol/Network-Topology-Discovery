@@ -7,6 +7,7 @@ import time
 import topology as topo
 import test_traffic as traffic
 import anaysitData as an
+import router as router
 
 community = "test"
 your_ip = "192.168.1.1"
@@ -43,12 +44,21 @@ indexTraffic = 0
 
 community,ipTraffic,collectionsName,config_name = topo.topology(your_ip,ip,community,username,password)
 while (True):
-    traffic.traffic(community,ipTraffic,collectionsName,indexTraffic)
-    
-    time.sleep(2)
+    indexTraffic,traffic_datetime = traffic.traffic(community,ipTraffic,collectionsName,indexTraffic)
+    #print "index traffic :" + str(indexTraffic) + "+++++++"
     collectionsNameTopo = collectionsName
-    collectionsNameTraff = str(collectionsName)+"_traffic_"+str(indexTraffic)
-    aaa = an.anaysit(collectionsNameTopo,collectionsNameTraff)
-    collectionsName_traffic_new = str(collectionsName)+"_traffic_new"+str(indexTraffic)
-    indexTraffic +=1 # +1 = 5 min
+    collectionsNameTraff = str(collectionsName)+"_traffic_"+str(indexTraffic-1)
+    #print collectionsNameTraff
+    aaa,collectionsName_traffic_new = an.anaysit(collectionsNameTopo,collectionsNameTraff,indexTraffic)
+    ##topo_config_name
+    coll_config = router.connectDatabase(config_name)
+    coll_config.update({"index":"0"},{'$set':{"traffic_index":str(indexTraffic)}})
+    ##
+    ##traffic_config_name
+    config_traffic_name = "timeline_"+collectionsName_traffic_new
+    coll_config_traffic = router.connectDatabase(config_traffic_name)
+    coll_config_traffic.insert_one({"index":"0"})
+    coll_config_traffic.update({"index":"0"},{'$set':{"name":collectionsName_traffic_new,"date_time":traffic_datetime}})
+    ##
+    #indexTraffic +=1 # +1 = 5 min
     break
