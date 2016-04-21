@@ -1,0 +1,129 @@
+r1#sh run
+Building configuration...
+
+Current configuration : 1783 bytes
+!
+! Last configuration change at 10:27:34 UTC Thu Apr 21 2016
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname r1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+enable password admin
+!
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+ip cef
+no ipv6 cef
+multilink bundle-name authenticated
+!
+cts logging verbose
+!
+!
+license udi pid CISCO1941/K9 sn FGL2003100P
+!
+!
+username admin password 0 admin
+!
+redundancy
+!
+!
+!
+!
+!
+!
+interface Embedded-Service-Engine0/0
+ no ip address
+ shutdown
+!
+interface GigabitEthernet0/0
+ no ip address
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/0.1
+ description subif for vlan 1
+ encapsulation dot1Q 1 native
+ ip address 192.168.1.11 255.255.255.0
+!
+interface GigabitEthernet0/0.2
+ description subif for vlan 2
+ encapsulation dot1Q 2
+ ip address 192.168.2.11 255.255.255.0
+!
+interface GigabitEthernet0/0.3
+ description subif for vlan 3
+ encapsulation dot1Q 3
+ ip address 192.168.3.11 255.255.255.0
+!
+interface GigabitEthernet0/0.4
+ description subif for vlan 4
+ encapsulation dot1Q 4
+ ip address 192.168.4.11 255.255.255.0
+!
+interface GigabitEthernet0/1
+ ip address 192.168.100.1 255.255.255.0
+ duplex auto
+ speed auto
+!
+interface Serial0/1/0
+ no ip address
+ shutdown
+!
+interface Serial0/1/1
+ no ip address
+ shutdown
+ clock rate 2000000
+!
+router ospf 1
+ network 0.0.0.0 255.255.255.255 area 0
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+snmp-server community test RO
+!
+control-plane
+!
+!
+!
+line con 0
+line aux 0
+line 2
+ no activation-character
+ no exec
+ transport preferred none
+ transport output pad telnet rlogin lapb-ta mop udptn v120 ssh
+ stopbits 1
+line vty 0 4
+ login local
+ transport input ssh
+!
+scheduler allocate 20000 1000
+!
+end

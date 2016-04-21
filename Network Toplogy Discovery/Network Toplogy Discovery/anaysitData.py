@@ -58,8 +58,8 @@ def anaysit(collectionsNameTopo,collectionsNameTraff,indexTraffic):
     name = str(collectionsNameTraff)+"_new"
     #name2 = str(collectionsNameTraff)+str(indexTraffic)+"_new"
 
-    print dataTopo
-    print dataTraffic
+    #print dataTopo
+    #print dataTraffic
 
     index_data = []
     cdp_data = []
@@ -150,18 +150,19 @@ def anaysit(collectionsNameTopo,collectionsNameTraff,indexTraffic):
         for j in range(0,len(final[i][1])):
             #print final[i][1][j]
             test.append(final[i][1][j])
-        print test
+        #print test
             
         #print "-------------------------"
         form = {"index":str(index)}
         coll.insert_one(form)
-        print len(test)
+        #print len(test)
         for i in range(0,len(test)):
 
             traffic_cut.append("index : " + str(index) + "," +str(test[i]))
             coll.update({"index":str(index)},{'$set':{"BW_out"+str(i):str(test[i])}}) 
         test = []
     #print traffic_cut
+    print "finish anaysit"
     writeFile(traffic_cut,filename)
     return traffic_cut,name
 

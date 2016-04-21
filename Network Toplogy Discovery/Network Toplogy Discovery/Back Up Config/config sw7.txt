@@ -1,0 +1,175 @@
+sw7#sh run
+Building configuration...
+
+Current configuration : 3687 bytes
+!
+! Last configuration change at 08:49:20 UTC Thu Apr 21 2016
+!
+version 15.2
+no service pad
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname sw7
+!
+boot-start-marker
+boot-end-marker
+!
+enable password admin
+!
+username admin password 0 admin
+no aaa new-model
+switch 1 provision ws-c2960x-24ts-l
+!
+!
+ip domain-name ssh_sw7
+!
+!
+!
+!
+!
+!
+!
+crypto pki trustpoint TP-self-signed-1737260160
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-1737260160
+ revocation-check none
+ rsakeypair TP-self-signed-1737260160
+!
+!
+crypto pki certificate chain TP-self-signed-1737260160
+ certificate self-signed 01
+  3082022B 30820194 A0030201 02020101 300D0609 2A864886 F70D0101 05050030
+  31312F30 2D060355 04031326 494F532D 53656C66 2D536967 6E65642D 43657274
+  69666963 6174652D 31373337 32363031 3630301E 170D3136 30333131 30353030
+  34345A17 0D323030 31303130 30303030 305A3031 312F302D 06035504 03132649
+  4F532D53 656C662D 5369676E 65642D43 65727469 66696361 74652D31 37333732
+  36303136 3030819F 300D0609 2A864886 F70D0101 01050003 818D0030 81890281
+  8100D9E0 50CD3B2E E1E450BB 86010A93 E2BF9805 A9804040 90240031 00D4E36C
+  2BD6CB75 4A7787C5 08CE295D 05CD110B DCBDD313 334BA266 0816C952 D10C8BE0
+  C8B6B1DB 2E6FBBC7 8565CFEC 31757E69 768491CA 85B1631B F2C5A50A 812FFD33
+  53AA64A9 A3A1CB97 D8A2C3DF 4E5B7158 63FBDEFD 2F2D39AD 8E8E5EB1 A3410F1B
+  ED910203 010001A3 53305130 0F060355 1D130101 FF040530 030101FF 301F0603
+  551D2304 18301680 14B51628 CFCF461F 8786740E 1766EB36 7B32430D 1B301D06
+  03551D0E 04160414 B51628CF CF461F87 86740E17 66EB367B 32430D1B 300D0609
+  2A864886 F70D0101 05050003 81810008 25652036 EDD43629 C6EC8FCD 14C2FC40
+  5911664D 2403F47D 2AA26C95 038BC76A B1D97C43 73570581 AF245D95 45E983DB
+  8C98855C CBD547B4 B72E8E7C E594BF8F 1A4F07F4 B32519EB 6A8574B4 EE0B06CD
+  A2B76198 BC06B4B6 7F19AFA3 87B9CD45 EEB8C252 3ABFCF41 A49D052E 597F3D80
+  CF3802F9 20578D0B E840BFBA 0269B3
+        quit
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+!
+!
+!
+vlan internal allocation policy ascending
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface FastEthernet0
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/0/1
+!
+interface GigabitEthernet1/0/2
+!
+interface GigabitEthernet1/0/3
+!
+interface GigabitEthernet1/0/4
+!
+interface GigabitEthernet1/0/5
+!
+interface GigabitEthernet1/0/6
+!
+interface GigabitEthernet1/0/7
+!
+interface GigabitEthernet1/0/8
+!
+interface GigabitEthernet1/0/9
+!
+interface GigabitEthernet1/0/10
+!
+interface GigabitEthernet1/0/11
+!
+interface GigabitEthernet1/0/12
+!
+interface GigabitEthernet1/0/13
+!
+interface GigabitEthernet1/0/14
+!
+interface GigabitEthernet1/0/15
+!
+interface GigabitEthernet1/0/16
+!
+interface GigabitEthernet1/0/17
+!
+interface GigabitEthernet1/0/18
+!
+interface GigabitEthernet1/0/19
+!
+interface GigabitEthernet1/0/20
+!
+interface GigabitEthernet1/0/21
+!
+interface GigabitEthernet1/0/22
+!
+interface GigabitEthernet1/0/23
+ switchport trunk allowed vlan 1-4,7,9-4094
+ switchport mode trunk
+!
+interface GigabitEthernet1/0/24
+ switchport trunk allowed vlan 1-4,6-4094
+ switchport mode trunk
+!
+interface GigabitEthernet1/0/25
+!
+interface GigabitEthernet1/0/26
+!
+interface GigabitEthernet1/0/27
+!
+interface GigabitEthernet1/0/28
+!
+interface Vlan1
+ no ip address
+!
+interface Vlan5
+ ip address 192.168.5.7 255.255.255.0
+!
+interface Vlan6
+ ip address 192.168.6.7 255.255.255.0
+!
+interface Vlan7
+ ip address 192.168.7.7 255.255.255.0
+!
+interface Vlan8
+ ip address 192.168.8.7 255.255.255.0
+!
+ip http server
+ip http secure-server
+!
+ip ssh version 2
+!
+!
+snmp-server community test RO
+!
+!
+line con 0
+line vty 0 4
+ login local
+ transport input ssh
+line vty 5 15
+ login
+!
+end

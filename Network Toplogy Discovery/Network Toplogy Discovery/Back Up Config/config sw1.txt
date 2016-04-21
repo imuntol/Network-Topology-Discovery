@@ -1,0 +1,181 @@
+sw1#sh running-config
+Building configuration...
+
+Current configuration : 3873 bytes
+!
+! Last configuration change at 08:36:18 UTC Thu Apr 21 2016
+!
+version 15.2
+no service pad
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname sw1
+!
+boot-start-marker
+boot-end-marker
+!
+enable password admin
+!
+username admin password 0 admin
+no aaa new-model
+switch 1 provision ws-c2960x-24ts-l
+ip routing
+!
+!
+ip domain-name ssh_sw1
+!
+!
+!
+!
+!
+!
+!
+crypto pki trustpoint TP-self-signed-1737262848
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-1737262848
+ revocation-check none
+ rsakeypair TP-self-signed-1737262848
+!
+!
+crypto pki certificate chain TP-self-signed-1737262848
+ certificate self-signed 01
+  3082022B 30820194 A0030201 02020101 300D0609 2A864886 F70D0101 05050030
+  31312F30 2D060355 04031326 494F532D 53656C66 2D536967 6E65642D 43657274
+  69666963 6174652D 31373337 32363238 3438301E 170D3136 30333130 31343231
+  33365A17 0D323030 31303130 30303030 305A3031 312F302D 06035504 03132649
+  4F532D53 656C662D 5369676E 65642D43 65727469 66696361 74652D31 37333732
+  36323834 3830819F 300D0609 2A864886 F70D0101 01050003 818D0030 81890281
+  8100D681 008C3D95 E2A7B8C7 218A692E 4D739CCE 1B18B6AB 1887466E FFF46128
+  E8AC0069 5108F191 5F01D37E D29B52F6 AA3EF06F 4E87C5FA 1A5570B8 532AD6CD
+  6E3F00B2 EB8515F3 F0A4715B 648D024B 934C8AB4 A609AC9D 16F49F91 752B0B9C
+  3CBF96BC B7ED2D40 B8DC760B 485A43AB 2E1BCE58 660D17E9 43C905B8 DFCD43F2
+  B63B0203 010001A3 53305130 0F060355 1D130101 FF040530 030101FF 301F0603
+  551D2304 18301680 1452396F E290FC65 794D8D2E 60F36727 4E1C636C 36301D06
+  03551D0E 04160414 52396FE2 90FC6579 4D8D2E60 F367274E 1C636C36 300D0609
+  2A864886 F70D0101 05050003 818100C4 EC2A1142 7B671EF5 61E7CFAB 3B4ED939
+  A794B6E3 7F02C995 0A759065 2F3906CB 8655002C C15B0421 5D3C6BBE 065FF6AE
+  A3B424DD 388CFA6E 5E975F04 A08DB9B7 46267121 0FC994F0 601B74A7 FB6AC1FF
+  BC3CC8D1 C662E7DB CCCA73BD 984D9494 DF8F5231 B52BA26C 74C58A83 733A55F2
+  950F53EF EDEAEB03 4008469A D6E22C
+        quit
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+spanning-tree vlan 2 priority 4096
+!
+!
+!
+!
+vlan internal allocation policy ascending
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface FastEthernet0
+ no ip address
+ no ip route-cache
+ shutdown
+!
+interface GigabitEthernet1/0/1
+!
+interface GigabitEthernet1/0/2
+!
+interface GigabitEthernet1/0/3
+!
+interface GigabitEthernet1/0/4
+!
+interface GigabitEthernet1/0/5
+!
+interface GigabitEthernet1/0/6
+!
+interface GigabitEthernet1/0/7
+!
+interface GigabitEthernet1/0/8
+!
+interface GigabitEthernet1/0/9
+!
+interface GigabitEthernet1/0/10
+!
+interface GigabitEthernet1/0/11
+!
+interface GigabitEthernet1/0/12
+!
+interface GigabitEthernet1/0/13
+!
+interface GigabitEthernet1/0/14
+!
+interface GigabitEthernet1/0/15
+!
+interface GigabitEthernet1/0/16
+!
+interface GigabitEthernet1/0/17
+!
+interface GigabitEthernet1/0/18
+!
+interface GigabitEthernet1/0/19
+!
+interface GigabitEthernet1/0/20
+!
+interface GigabitEthernet1/0/21
+ switchport mode trunk
+!
+interface GigabitEthernet1/0/22
+ switchport trunk allowed vlan 2-4094
+ switchport mode trunk
+!
+interface GigabitEthernet1/0/23
+ switchport trunk allowed vlan 1,2,5-4094
+ switchport mode trunk
+!
+interface GigabitEthernet1/0/24
+ switchport trunk allowed vlan 1,2,4-4094
+ switchport mode trunk
+!
+interface GigabitEthernet1/0/25
+!
+interface GigabitEthernet1/0/26
+!
+interface GigabitEthernet1/0/27
+!
+interface GigabitEthernet1/0/28
+!
+interface Vlan1
+ ip address 192.168.1.1 255.255.255.0
+!
+interface Vlan2
+ ip address 192.168.2.1 255.255.255.0
+!
+interface Vlan3
+ ip address 192.168.3.1 255.255.255.0
+!
+interface Vlan4
+ ip address 192.168.4.1 255.255.255.0
+!
+ip default-gateway 192.168.1.11
+ip http server
+ip http secure-server
+!
+ip route 0.0.0.0 0.0.0.0 192.168.1.11
+ip ssh version 2
+!
+!
+snmp-server community test RO
+!
+!
+line con 0
+line vty 0 4
+ login local
+ transport input ssh
+line vty 5 15
+ login
+!
+end

@@ -26,6 +26,7 @@ def getRowCol(data):
     return numrows,numcols
 
 def New_reArrange(data):
+    #print data
     for i in range(0,len(data)):
         data[i] = data[i].split(".")[1];
         data[i] = data[i].split("=");
@@ -62,6 +63,8 @@ def traffOut(community,ip):
     return Out
 
 def ifSpeed(community,ip):
+    #print ip
+    #print type(ip)
     Speed = New_reArrange(router.getData(router.command(community,ip,IFMIB_ifSpeed)))
     return Speed
 
@@ -197,7 +200,7 @@ def traffic(community,ipTraffic,collectionsName,indexTraffic):
         #avg = avg + In_a + Out_a
         #avg = avg/n
         #print "Avg : " +str(avg)
-    indexTraffic +=1 # +1 = 5 min
+    indexTraffic = int(indexTraffic) + 1 # +1 = 5 min
     router.writeFile(newTraffic,filename)
     return indexTraffic,date_time
 
