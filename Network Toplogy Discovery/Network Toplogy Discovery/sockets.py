@@ -288,8 +288,9 @@ while True:
         elif message['cmd'] == "stimeline":
             db_timeline = message['db_timeline']
             coll_timeline = connectDatabase(db_timeline)
+            traffic_topology_json = []
             a = []
-            for x in coll.find():
+            for x in coll_timeline.find():
                 a.append(x)
             for d in a:
                 try:
@@ -297,6 +298,7 @@ while True:
                 except:
                     pass
             traffic_topology_json = json.dumps(a)
+            print traffic_topology_json
             a = []
             a.append(traffic_topology_json)
             name = makeFile("traffic")

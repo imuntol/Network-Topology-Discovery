@@ -1,0 +1,8 @@
+index : 0,FastEthernet1/0,0.73,0.77%
+index : 0,FastEthernet2/0,0.0,0.0%
+index : 0,FastEthernet0/1,0.31,3.25%
+index : 1,FastEthernet0/0,0.27,2.83%
+index : 2,FastEthernet0/1,0.0,0.0%
+index : 3,FastEthernet0/0,0.68,7.13%
+index : 3,FastEthernet0/1,0.71,7.44%
+index : 4,FastEthernet0/0,0.6,6.29%
