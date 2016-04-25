@@ -157,7 +157,7 @@ def anaysit(collectionsNameTopo,collectionsNameTraff,indexTraffic):
         coll.insert_one(form)
         #print len(test)
         for i in range(0,len(test)):
-
+            print "test : " + str(test[i])
             traffic_cut.append("index : " + str(index) + "," +str(test[i]))
             coll.update({"index":str(index)},{'$set':{"BW_out"+str(i):str(test[i])}}) 
         test = []

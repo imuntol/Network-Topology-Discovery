@@ -16,6 +16,7 @@ import switch as switch
 import check_device as check
 import topology as topo
 import thread
+import threading
 import anaysitData as an
 import ast
 
@@ -57,7 +58,12 @@ def connectDatabase(collectionsName):
     collection = db[database]
     return collection
 
-def update_traffic(community,ipTraffic,collectionsName,indexTraffic,config_name):
+def update_traffic(lock, coll_config, community,ipTraffic,collectionsName,indexTraffic,config_name):
+    lock.acquire()
+    data = coll_config.find_one()
+    indexTraffic = data['traffic_index']
+    print "sssssssssssssssssssssssssssssssssssssssssss", indexTraffic
+
     print "indexTraffic(update_traffic1) : " + str(indexTraffic)
     indexTraffic,traffic_datetime = traffic.traffic(community,ipTraffic,collectionsName,indexTraffic)   #Wed17Feb2016_053526
     print "indexTraffic(update_traffic2) : " + str(indexTraffic)
@@ -74,6 +80,7 @@ def update_traffic(community,ipTraffic,collectionsName,indexTraffic,config_name)
     coll_config_traffic.insert_one({"index":"0"})
     coll_config_traffic.update({"index":"0"},{'$set':{"name":collectionsName_traffic_new,"date_time":traffic_datetime}})
     ##
+    lock.release()  
 
     return indexTraffic,collectionsName_traffic_new
 
@@ -92,6 +99,7 @@ s.listen(1)
 
 
 while True:
+    lock = threading.Lock()
     print "Waiting for Client to connnect"
     client,address = s.accept()
     print('connected from: ', address)
@@ -103,9 +111,11 @@ while True:
             message = client.recv(Buff_size)
         except:
             sys.exit(0)
+            #break
         print "1:" + str(message) + str(len(message))
         if len(message) == 0:
             sys.exit(0)
+            #break
         if message[0] != '{': #and message[0] != '['
             continue
         message = json.loads(message)
@@ -140,7 +150,7 @@ while True:
             a.append(data_topology_json)
             name = makeFile("data")
             writeFile(a,name)
-            indexTraffic,collectionsName_traffic_new = update_traffic(community,ipTraffic,collectionsName,indexTraffic,config_name)
+            indexTraffic,collectionsName_traffic_new = update_traffic(lock, coll_config, community,ipTraffic,collectionsName,indexTraffic,config_name)
             
             print "collectionsName_traffic_new : " + str(collectionsName_traffic_new)
             client.send("done")
@@ -165,10 +175,8 @@ while True:
             client.send("done")
   
         elif message['cmd'] == "update_traffic":
-            data = coll_config.find_one()
-            indexTraffic = data['traffic_index']
             try:
-               thread.start_new_thread(update_traffic,(community,ipTraffic,collectionsName,indexTraffic,config_name))
+               thread.start_new_thread(update_traffic,(lock, coll_config, community,ipTraffic,collectionsName,indexTraffic,config_name))
 
             except Exception,e:
                 print e

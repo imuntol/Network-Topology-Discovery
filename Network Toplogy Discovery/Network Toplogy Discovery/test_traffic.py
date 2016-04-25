@@ -144,7 +144,7 @@ def traffic(community,ipTraffic,collectionsName,indexTraffic):
         start_time = time.time()
         trafficIn_1 = traffIn(community,ip)
         trafficOut_1 = traffOut(community,ip)
-        time.sleep(5)
+        time.sleep(2)
         trafficIn_2 = traffIn(community,ip)
         trafficOut_2 = traffOut(community,ip)
         delta_time = time.time() - start_time

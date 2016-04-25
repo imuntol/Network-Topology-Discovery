@@ -54,7 +54,7 @@ def topology(your_ip,ip,community,username,password):
     ## db config
     config_name = collectionsName+"_config"
     coll_config = router.connectDatabase(config_name)
-    coll_config.insert_one({"name":"none","date":collectionsName,"index":"0","traffic_index":"none","ip_traffic":"none","community":"none"})
+    coll_config.insert_one({"name":"none","date":collectionsName,"index":"0","traffic_index":"0","ip_traffic":"none","community":"none"})
     ##
     done_list.append(your_ip)
     ipTraffic.append(str(ip))
