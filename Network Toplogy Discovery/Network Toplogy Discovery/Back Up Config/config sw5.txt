@@ -84,6 +84,8 @@ interface FastEthernet0
 interface GigabitEthernet1/0/1
 !
 interface GigabitEthernet1/0/2
+ switchport access vlan 4
+ switchport mode access
 !
 interface GigabitEthernet1/0/3
 !

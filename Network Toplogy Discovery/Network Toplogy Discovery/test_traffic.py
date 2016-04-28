@@ -144,9 +144,13 @@ def traffic(community,ipTraffic,collectionsName,indexTraffic):
         start_time = time.time()
         trafficIn_1 = traffIn(community,ip)
         trafficOut_1 = traffOut(community,ip)
-        time.sleep(2)
+        #print "traffic in 1 " ,trafficIn_1
+        #print "traffic out 1 " ,trafficOut_1
+        time.sleep(1)
         trafficIn_2 = traffIn(community,ip)
         trafficOut_2 = traffOut(community,ip)
+        #print "traffic in 2 " ,trafficIn_2
+        #print "traffic out 2 " ,trafficOut_2
         delta_time = time.time() - start_time
         ## make information
         form = {"index":str(index)}
@@ -158,15 +162,28 @@ def traffic(community,ipTraffic,collectionsName,indexTraffic):
         for i in range(0,r):
             if check_Status[i][1] == "up(1)" and check_Interface[i][1] !="Null0":
                 
-                print check_Interface[i][1]
+                #print check_Interface[i][1]
                 ### *8 for bit and /1024*1024 for Mega
-                In = round(((float(trafficIn_2[i][1]) - float(trafficIn_1[i][1]))*8)/(delta_time*1024*1024),2)
-                Out = round(((float(trafficOut_2[i][1]) - float(trafficOut_1[i][1]))*8)/(delta_time*1024*1024),2)
+                #print "-----------------------------------in2 - in1 :" , int(trafficIn_2[i][1]) - int(trafficIn_1[i][1])
+                #print "-----------------------------------out2 - out1 :" , int(trafficOut_2[i][1]) - int(trafficOut_1[i][1])
+
+                In = round(((float(trafficIn_2[i][1])*8) - (float(trafficIn_1[i][1])*8))/(1024*1024),2)
+                Out = round(((float(trafficOut_2[i][1])*8) - (float(trafficOut_1[i][1])*8))/(1024*1024),2)
                 #In = ((float(trafficIn_2[i][1]) - float(trafficIn_1[i][1])))/(delta_time)
                 #Out = ((float(trafficOut_2[i][1]) - float(trafficOut_1[i][1])))/(delta_time)
+
+                print "---------------------------------------------------"
+
+                print "In b/s : " + str(In*1024*1024)
+                print "Out b/s : " + str(Out*1024*1024)
+                print "total : " +str((In+Out)*1024*1024)
+                print "---------------------------------------------------"
+                print "---------------------------------------------------"
                 print "In Mb/s : " + str(In)
                 print "Out Mb/s : " + str(Out)
+                print "total : " +str((In+Out))
                 print "---------------------------------------------------"
+
                 #print check_Interface[2][1]
 
                 ## for test
@@ -176,8 +193,8 @@ def traffic(community,ipTraffic,collectionsName,indexTraffic):
 
                 ### find Bandwith Usage in %
                 #print In,Out
-                Speed_In = round(In*100*1024*1024/float(if_Speed[i][1]),2)
-                Speed_Out = round(Out*100*1024*1024/float(if_Speed[i][1]),2)
+                Speed_In = round(In*100*1024*1024/int(if_Speed[i][1]))
+                Speed_Out = round(Out*100*1024*1024/int(if_Speed[i][1]))
                 #Speed_In = round(Speed_In,2)
                 #Speed_Out = round(Speed_Out,2)
                 #print Speed_In,Speed_Out

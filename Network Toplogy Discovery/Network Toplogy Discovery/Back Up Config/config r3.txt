@@ -70,6 +70,7 @@ interface GigabitEthernet0/0
  no ip address
  duplex auto
  speed auto
+ no shutdown
 !
 interface GigabitEthernet0/0.1
  description subif for vlan 1
@@ -95,6 +96,7 @@ interface GigabitEthernet0/1
  ip address 192.168.200.2 255.255.255.0
  duplex auto
  speed auto
+ no shutdown
 !
 interface Serial0/1/0
  no ip address

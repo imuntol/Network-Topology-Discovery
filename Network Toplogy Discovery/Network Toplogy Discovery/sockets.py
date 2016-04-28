@@ -58,34 +58,40 @@ def connectDatabase(collectionsName):
     collection = db[database]
     return collection
 
-def update_traffic(lock, coll_config, community,ipTraffic,collectionsName,indexTraffic,config_name):
+def update_traffic(client,lock, coll_config, community,ipTraffic,collectionsName,indexTraffic,config_name):
     lock.acquire()
     data = coll_config.find_one()
     indexTraffic = data['traffic_index']
     print "sssssssssssssssssssssssssssssssssssssssssss", indexTraffic
 
     print "indexTraffic(update_traffic1) : " + str(indexTraffic)
-    indexTraffic,traffic_datetime = traffic.traffic(community,ipTraffic,collectionsName,indexTraffic)   #Wed17Feb2016_053526
-    print "indexTraffic(update_traffic2) : " + str(indexTraffic)
-    collectionsNameTopo = collectionsName
-    collectionsNameTraff = str(collectionsName)+"_traffic_"+str(indexTraffic-1)
-    aaa,collectionsName_traffic_new = an.anaysit(collectionsNameTopo,collectionsNameTraff,indexTraffic)
-    ##topo_config_name
-    coll_config = connectDatabase(config_name)
-    coll_config.update({"index":"0"},{'$set':{"traffic_index":str(indexTraffic)}})
-    ##
-    ##traffic_config_name
-    config_traffic_name = "timeline_"+collectionsName_traffic_new
-    coll_config_traffic = connectDatabase(config_traffic_name)
-    coll_config_traffic.insert_one({"index":"0"})
-    coll_config_traffic.update({"index":"0"},{'$set':{"name":collectionsName_traffic_new,"date_time":traffic_datetime}})
-    ##
+    try:
+        collectionsName_traffic_new = "test"
+        indexTraffic,traffic_datetime = traffic.traffic(community,ipTraffic,collectionsName,indexTraffic)   #Wed17Feb2016_053526
+        print "indexTraffic(update_traffic2) : " + str(indexTraffic)
+        collectionsNameTopo = collectionsName
+        collectionsNameTraff = str(collectionsName)+"_traffic_"+str(indexTraffic-1)
+        aaa,collectionsName_traffic_new = an.anaysit(collectionsNameTopo,collectionsNameTraff,indexTraffic)
+        ##topo_config_name
+        coll_config = connectDatabase(config_name)
+        coll_config.update({"index":"0"},{'$set':{"traffic_index":str(indexTraffic)}})
+        ##
+        ##traffic_config_name
+        config_traffic_name = "timeline_"+collectionsName_traffic_new
+        coll_config_traffic = connectDatabase(config_traffic_name)
+        coll_config_traffic.insert_one({"index":"0"})
+        coll_config_traffic.update({"index":"0"},{'$set':{"name":collectionsName_traffic_new,"date_time":traffic_datetime}})
+        ##
+    except:
+        print "Topology has been change"
+        client.send("missing")
     lock.release()  
 
     return indexTraffic,collectionsName_traffic_new
 
 
 indexTraffic = 0
+
 Host = "localhost"
 Port = 50000
 Buff_size = 1024
@@ -150,7 +156,7 @@ while True:
             a.append(data_topology_json)
             name = makeFile("data")
             writeFile(a,name)
-            indexTraffic,collectionsName_traffic_new = update_traffic(lock, coll_config, community,ipTraffic,collectionsName,indexTraffic,config_name)
+            indexTraffic,collectionsName_traffic_new = update_traffic(client,lock, coll_config, community,ipTraffic,collectionsName,indexTraffic,config_name)
             
             print "collectionsName_traffic_new : " + str(collectionsName_traffic_new)
             client.send("done")
@@ -176,8 +182,9 @@ while True:
   
         elif message['cmd'] == "update_traffic":
             try:
-               thread.start_new_thread(update_traffic,(lock, coll_config, community,ipTraffic,collectionsName,indexTraffic,config_name))
-
+               thread.start_new_thread(update_traffic,(client,lock, coll_config, community,ipTraffic,collectionsName,indexTraffic,config_name))
+               #if state == "fail":
+               #     client.send("missing")
             except Exception,e:
                 print e
 
