@@ -19,7 +19,7 @@ import thread
 import anaysitData as an
 import ast
 
-ip = "192.168.200.1"
+ip = "192.168.1.2"
 community = "test"
 time_ = []
 traffic_ = []
@@ -46,11 +46,24 @@ while(a<=25):
     #print "In2 : " + str(In2[25][1])
     #print "BW : " + str(ifSpeed[25][1])
 
-    In = ((int(In2[25][1]) - int(In1[25][1])))/(t*1024)
-    Out = ((int(Out2[25][1]) - int(Out1[25][1])))/(t*1024)
-    print "In : " + str(In)
-    print "Out : " + str(Out)
-    print "total : " + str(In+Out)
+    
+    #print In2
+
+    In = float(In2[2][1]) - float(In1[2][1])
+    Out = float(Out2[2][1]) - float(Out1[2][1])
+
+    #print In*8
+    #print Out*8
+
+    In =  round(In*8/(t*1024*1024),5)
+    Out =  round(Out*8/(t*1024*1024),5)
+
+    #In = round(((float(trafficIn_2[i][1])*8) - (float(trafficIn_1[i][1])*8))/(1024*1024),2)
+    #Out = round(((float(trafficOut_2[i][1])*8) - (float(trafficOut_1[i][1])*8))/(1024*1024),2)
+                
+    print "In : " + str(In) +" Mb/s"
+    print "Out : " + str(Out) +" Mb/s"
+    print "total : " + str(In+Out) +" Mb/s"
     time_.append(date_time)
     traffic_.append(str(In+Out))
     a+=1

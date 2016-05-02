@@ -167,8 +167,8 @@ def traffic(community,ipTraffic,collectionsName,indexTraffic):
                 #print "-----------------------------------in2 - in1 :" , int(trafficIn_2[i][1]) - int(trafficIn_1[i][1])
                 #print "-----------------------------------out2 - out1 :" , int(trafficOut_2[i][1]) - int(trafficOut_1[i][1])
 
-                In = round(((float(trafficIn_2[i][1])*8) - (float(trafficIn_1[i][1])*8))/(1024*1024),2)
-                Out = round(((float(trafficOut_2[i][1])*8) - (float(trafficOut_1[i][1])*8))/(1024*1024),2)
+                In = round(((float(trafficIn_2[i][1])*8) - (float(trafficIn_1[i][1])*8))/(delta_time*1024*1024),2)
+                Out = round(((float(trafficOut_2[i][1])*8) - (float(trafficOut_1[i][1])*8))/(delta_time*1024*1024),2)
                 #In = ((float(trafficIn_2[i][1]) - float(trafficIn_1[i][1])))/(delta_time)
                 #Out = ((float(trafficOut_2[i][1]) - float(trafficOut_1[i][1])))/(delta_time)
 
@@ -183,6 +183,10 @@ def traffic(community,ipTraffic,collectionsName,indexTraffic):
                 print "Out Mb/s : " + str(Out)
                 print "total : " +str((In+Out))
                 print "---------------------------------------------------"
+                print "---------------------------------------------------"
+                print "BW in : " + str(if_Speed[i][1])
+                print "BW out : " + str(if_Speed[i][1])
+                print "---------------------------------------------------"
 
                 #print check_Interface[2][1]
 
@@ -195,6 +199,8 @@ def traffic(community,ipTraffic,collectionsName,indexTraffic):
                 #print In,Out
                 Speed_In = round(In*100*1024*1024/int(if_Speed[i][1]))
                 Speed_Out = round(Out*100*1024*1024/int(if_Speed[i][1]))
+
+
                 #Speed_In = round(Speed_In,2)
                 #Speed_Out = round(Speed_Out,2)
                 #print Speed_In,Speed_Out
